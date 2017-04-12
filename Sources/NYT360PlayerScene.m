@@ -87,13 +87,13 @@
         [self.rootNode addChildNode:_cameraNode];
         
         SKScene *skScene = ({
-            SKScene *scene = [[SKScene alloc] initWithSize:CGSizeMake(1280, 1280)];
+            SKScene *scene = [[SKScene alloc] initWithSize:CGSizeMake(1280, 720)];
             scene.shouldRasterize = YES;
             scene.scaleMode = SKSceneScaleModeAspectFit;
             _videoNode = ({
                 NYTSKVideoNode *videoNode = [[NYTSKVideoNode alloc] initWithAVPlayer:player];
                 videoNode.position = CGPointMake(scene.size.width / 2, scene.size.height / 2);
-                videoNode.size = scene.size;
+                videoNode.size = CGSizeMake(scene.size.width / 4, scene.size.height / 2);
                 videoNode.yScale = -1;
                 videoNode.xScale = -1;
                 videoNode.nyt_delegate = self;
@@ -106,11 +106,12 @@
         SCNNode *sphereNode = ({
             SCNNode *sphereNode = [SCNNode new];
             sphereNode.position = SCNVector3Make(0, 0, 0);
-            sphereNode.geometry = [SCNSphere sphereWithRadius:100.0]; //TODO [DZ]: What is the correct size here?
+            sphereNode.geometry = [SCNTube tubeWithInnerRadius:99.0 outerRadius:100.0 height:100.0];
+            //sphereNode.geometry = [SCNSphere sphereWithRadius:100.0]; //TODO [DZ]: What is the correct size here?
             sphereNode.geometry.firstMaterial.diffuse.contents = skScene;
             sphereNode.geometry.firstMaterial.diffuse.minificationFilter = SCNFilterModeLinear;
             sphereNode.geometry.firstMaterial.diffuse.magnificationFilter = SCNFilterModeLinear;
-            sphereNode.geometry.firstMaterial.doubleSided = YES;
+            sphereNode.geometry.firstMaterial.doubleSided = NO;
             sphereNode;
         });
         [self.rootNode addChildNode:sphereNode];
