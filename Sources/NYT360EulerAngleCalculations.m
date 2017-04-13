@@ -152,6 +152,7 @@ CGFloat NYT360OptimalYFovForViewSize(CGSize viewSize) {
     } else {
         yFov = NYT360EulerAngleCalculationYFovDefault;
     }
+    
     return yFov;
 }
 

@@ -74,7 +74,12 @@
         
         int width = 1280;
         int height = 720;
+        
         int tubeRadius = 100.0;
+        int tubeHeight = (2 * M_PI * tubeRadius / 5.0) * (9.0 / 16.0);
+        //int tubeHeight = (2 * M_PI * tubeRadius / 5.0) * (9.0 / 16.0) * 1.65;
+        
+        NSLog(@"%i", tubeHeight);
         
         _videoPlaybackIsPaused = YES;
         
@@ -113,7 +118,8 @@
         SCNNode *sphereNode = ({
             SCNNode *sphereNode = [SCNNode new];
             sphereNode.position = SCNVector3Make(0, 0, 0);
-            sphereNode.geometry = [SCNTube tubeWithInnerRadius:tubeRadius outerRadius:(tubeRadius + 0.1) height:74.25];
+            sphereNode.geometry = [SCNTube tubeWithInnerRadius:tubeRadius outerRadius:(tubeRadius + 0.1) height:tubeHeight];
+            //sphereNode.geometry = [SCNTube tubeWithInnerRadius:tubeRadius outerRadius:(tubeRadius + 0.1) height:74.25 / 2];
             //sphereNode.geometry = [SCNSphere sphereWithRadius:100.0]; //TODO [DZ]: What is the correct size here?
             sphereNode.geometry.firstMaterial.diffuse.contents = skScene;
             sphereNode.geometry.firstMaterial.diffuse.minificationFilter = SCNFilterModeLinear;
