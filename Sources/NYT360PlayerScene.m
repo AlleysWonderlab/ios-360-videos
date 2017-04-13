@@ -72,11 +72,17 @@
 - (instancetype)initWithAVPlayer:(AVPlayer *)player boundToView:(SCNView *)view {
     if ((self = [super init])) {
         
+        int width = 1280;
+        int height = 720;
+        int tubeRadius = 100.0;
+        
         _videoPlaybackIsPaused = YES;
         
         _player = player;
         
         _camera = [SCNCamera new];
+        _camera.wantsHDR = YES;
+        _camera.automaticallyAdjustsZRange = YES;
         
         _cameraNode = ({
             SCNNode *cameraNode = [SCNNode new];
@@ -87,13 +93,14 @@
         [self.rootNode addChildNode:_cameraNode];
         
         SKScene *skScene = ({
-            SKScene *scene = [[SKScene alloc] initWithSize:CGSizeMake(1280, 720)];
+            SKScene *scene = [[SKScene alloc] initWithSize:CGSizeMake(3 * width, height)];
             scene.shouldRasterize = YES;
             scene.scaleMode = SKSceneScaleModeAspectFit;
             _videoNode = ({
                 NYTSKVideoNode *videoNode = [[NYTSKVideoNode alloc] initWithAVPlayer:player];
+                NSLog(@"%f, %f", scene.size.width, scene.size.height);
                 videoNode.position = CGPointMake(scene.size.width / 2, scene.size.height / 2);
-                videoNode.size = CGSizeMake(scene.size.width / 4, scene.size.height / 2);
+                videoNode.size = CGSizeMake(scene.size.width / 5, scene.size.height); // 28mm == 75 degree ~= 360/5 degree
                 videoNode.yScale = -1;
                 videoNode.xScale = -1;
                 videoNode.nyt_delegate = self;
@@ -106,7 +113,7 @@
         SCNNode *sphereNode = ({
             SCNNode *sphereNode = [SCNNode new];
             sphereNode.position = SCNVector3Make(0, 0, 0);
-            sphereNode.geometry = [SCNTube tubeWithInnerRadius:99.0 outerRadius:100.0 height:100.0];
+            sphereNode.geometry = [SCNTube tubeWithInnerRadius:tubeRadius outerRadius:(tubeRadius + 0.1) height:74.25];
             //sphereNode.geometry = [SCNSphere sphereWithRadius:100.0]; //TODO [DZ]: What is the correct size here?
             sphereNode.geometry.firstMaterial.diffuse.contents = skScene;
             sphereNode.geometry.firstMaterial.diffuse.minificationFilter = SCNFilterModeLinear;
@@ -118,6 +125,8 @@
         
         view.scene = self;
         view.pointOfView = self.cameraNode;
+        
+        NSLog(@"%f, %f", self.cameraNode.camera.xFov, self.cameraNode.camera.yFov);
     }
     
     return self;
