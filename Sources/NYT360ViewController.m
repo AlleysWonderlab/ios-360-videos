@@ -53,14 +53,14 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 
 #pragma mark - Init
 
-- (instancetype)initWithAVPlayer:(AVPlayer *)player player2:(AVPlayer *)player2 motionManager:(id<NYT360MotionManagement>)motionManager {
+- (instancetype)initWithAVPlayer:(AVPlayer *)player motionManager:(id<NYT360MotionManagement>)motionManager {
     self = [super init];
     if (self) {
         CGRect screenBounds = [[UIScreen mainScreen] bounds];
         CGRect initialSceneFrame = NYT360ViewControllerSceneBoundsForScreenBounds(screenBounds);
         _underlyingSceneSize = initialSceneFrame.size;
         _sceneView = [[SCNView alloc] initWithFrame:initialSceneFrame];
-        _playerScene = [[NYT360PlayerScene alloc] initWithAVPlayer:player player2:player2 boundToView:_sceneView];
+        _playerScene = [[NYT360PlayerScene alloc] initWithAVPlayer:player boundToView:_sceneView];
         _cameraController = [[NYT360CameraController alloc] initWithView:_sceneView motionManager:motionManager];
         _cameraController.delegate = self;
 

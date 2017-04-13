@@ -63,21 +63,18 @@
 @property (nonatomic, assign) BOOL videoPlaybackIsPaused;
 @property (nonatomic, readonly) SCNNode *cameraNode;
 @property (nonatomic, readonly) NYTSKVideoNode *videoNode;
-@property (nonatomic, readonly) NYTSKVideoNode *videoNode2;
 @property (nonatomic, readonly) AVPlayer *player;
-@property (nonatomic, readonly) AVPlayer *player2;
 
 @end
 
 @implementation NYT360PlayerScene
 
-- (instancetype)initWithAVPlayer:(AVPlayer *)player player2:(AVPlayer *)player2 boundToView:(SCNView *)view {
+- (instancetype)initWithAVPlayer:(AVPlayer *)player boundToView:(SCNView *)view {
     if ((self = [super init])) {
         
         _videoPlaybackIsPaused = YES;
         
         _player = player;
-        _player2 = player2;
         
         _camera = [SCNCamera new];
         
@@ -96,7 +93,7 @@
             _videoNode = ({
                 NYTSKVideoNode *videoNode = [[NYTSKVideoNode alloc] initWithAVPlayer:player];
                 videoNode.position = CGPointMake(scene.size.width / 2, scene.size.height / 2);
-                videoNode.size = CGSizeMake(scene.size.width / 4, scene.size.height);
+                videoNode.size = CGSizeMake(scene.size.width / 4, scene.size.height / 2);
                 videoNode.yScale = -1;
                 videoNode.xScale = -1;
                 videoNode.nyt_delegate = self;
@@ -118,42 +115,6 @@
             sphereNode;
         });
         [self.rootNode addChildNode:sphereNode];
-        
-        
-        /*
-        SKScene *skScene2 = ({
-            SKScene *scene = [[SKScene alloc] initWithSize:CGSizeMake(1280, 720)];
-            scene.shouldRasterize = YES;
-            scene.scaleMode = SKSceneScaleModeAspectFit;
-            _videoNode2 = ({
-                NYTSKVideoNode *videoNode = [[NYTSKVideoNode alloc] initWithAVPlayer:player2];
-                videoNode.position = CGPointMake(scene.size.width / 2, scene.size.height / 2);
-                videoNode.size = CGSizeMake(scene.size.width / 4, scene.size.height);
-                videoNode.yScale = -1;
-                videoNode.xScale = -1;
-                videoNode.nyt_delegate = self;
-                videoNode;
-            });
-            [scene addChild:_videoNode2];
-            scene;
-        });
-        
-        SCNNode *sphereNode2 = ({
-            SCNNode *sphereNode = [SCNNode new];
-            sphereNode.position = SCNVector3Make(0, 0, 0);
-            sphereNode.geometry = [SCNTube tubeWithInnerRadius:99.0 outerRadius:100.0 height:100.0];
-            //sphereNode.geometry = [SCNSphere sphereWithRadius:100.0]; //TODO [DZ]: What is the correct size here?
-            sphereNode.geometry.firstMaterial.diffuse.contents = skScene2;
-            sphereNode.geometry.firstMaterial.diffuse.minificationFilter = SCNFilterModeLinear;
-            sphereNode.geometry.firstMaterial.diffuse.magnificationFilter = SCNFilterModeLinear;
-            sphereNode.geometry.firstMaterial.doubleSided = NO;
-            //sphereNode.rotation = SCNVector4Make(0, 1, 0, M_PI_2);
-            sphereNode.pivot = SCNMatrix4MakeRotation(M_PI, 0, 1, 0);
-            sphereNode;
-        });
-        [self.rootNode addChildNode:sphereNode2];
-         */
-        
         
         view.scene = self;
         view.pointOfView = self.cameraNode;
@@ -190,16 +151,12 @@
         // it's paused even though the audio is still playing in the background.
         // The steps to reproduce this particular bug are finicky but reliable.
         self.videoNode.paused = NO;
-        
-        [self.player2 play];
-        self.videoNode2.paused = NO;
     }
     else {
         // Prior to iOS 10, SceneKit prefers to use `setPaused:` alone to toggle
         // playback on a video node. Mimic this usage here to ensure consistency
         // and avoid putting the player into an out-of-sync state.
         self.videoNode.paused = NO;
-        self.videoNode2.paused = NO;
     }
     
 }
@@ -230,9 +187,6 @@
         // it's paused even though the audio is still playing in the background.
         // The steps to reproduce this particular bug are finicky but reliable.
         self.videoNode.paused = YES;
-        
-        [self.player2 pause];
-        self.videoNode2.paused = YES;
     }
     else {
         // Prior to iOS 10, SceneKit prefers to use `setPaused:` alone to toggle
@@ -252,10 +206,6 @@
         // release).
         [self.player pause];
         self.videoNode.paused = YES;
-        
-        
-        [self.player2 pause];
-        self.videoNode2.paused = YES;
     }
     
 }
