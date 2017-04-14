@@ -49,8 +49,10 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
         _pointOfView = view.pointOfView;
         _view = view;
         _currentPosition = CGPointMake(3.14, 0);
-        _allowedDeviceMotionPanningAxes = NYT360PanningAxisHorizontal | NYT360PanningAxisVertical;
-        _allowedPanGesturePanningAxes = NYT360PanningAxisHorizontal | NYT360PanningAxisVertical;
+        _allowedDeviceMotionPanningAxes = NYT360PanningAxisHorizontal;
+        _allowedPanGesturePanningAxes = NYT360PanningAxisHorizontal;
+        //_allowedDeviceMotionPanningAxes = NYT360PanningAxisHorizontal | NYT360PanningAxisVertical;
+        //_allowedPanGesturePanningAxes = NYT360PanningAxisHorizontal | NYT360PanningAxisVertical;
         
         _panRecognizer = [[NYT360CameraPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
         _panRecognizer.delegate = self;
@@ -125,7 +127,7 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
     if (viewSize.width > viewSize.height) {
         self.pointOfView.camera.yFov = 42.1875;
     } else {
-      self.pointOfView.camera.yFov = NYT360OptimalYFovForViewSize(viewSize);
+        self.pointOfView.camera.yFov = NYT360OptimalYFovForViewSize(viewSize);
     }
 
     //self.pointOfView.camera.yFov = NYT360OptimalYFovForViewSize(viewSize);
