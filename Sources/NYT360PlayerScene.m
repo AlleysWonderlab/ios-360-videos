@@ -77,7 +77,6 @@
         
         int tubeRadius = 100.0;
         int tubeHeight = (2 * M_PI * tubeRadius / 5.0) * (9.0 / 16.0);
-        //int tubeHeight = (2 * M_PI * tubeRadius / 5.0) * (9.0 / 16.0) * 1.65;
         
         NSLog(@"%i", tubeHeight);
         
@@ -107,7 +106,7 @@
                 videoNode.position = CGPointMake(scene.size.width / 2, scene.size.height / 2);
                 videoNode.size = CGSizeMake(scene.size.width / 5, scene.size.height); // 28mm == 75 degree ~= 360/5 degree
                 videoNode.yScale = -1;
-                videoNode.xScale = -1;
+                videoNode.xScale = 1;
                 videoNode.nyt_delegate = self;
                 videoNode;
             });
