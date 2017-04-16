@@ -127,9 +127,9 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
     //self.pointOfView.camera.yFov = NYT360OptimalYFovForViewSize(viewSize);
     
     float screenRatio = viewSize.height / viewSize.width;
+    NSLog(@"%f", screenRatio);
     
     if (screenRatio > 0.8 && screenRatio < 0.9) {
-        NSLog(@"%f", screenRatio);
         self.pointOfView.camera.yFov = NYT360OptimalYFovForViewSize(viewSize);
     } else {
         self.pointOfView.camera.yFov = 42.1875 / 1.1; // Calculated by xfov(360/5 degree) and 16/9 ratio
