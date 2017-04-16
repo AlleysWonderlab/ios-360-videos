@@ -124,15 +124,16 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
 }
 
 - (void)updateCameraFOV:(CGSize)viewSize {
-    if (viewSize.width > viewSize.height) {
-        self.pointOfView.camera.yFov = 42.1875 / 1.1; // Calculated by xfov(360/5 degree) and 16/9 ratio
-        //self.pointOfView.camera.yFov = 42.1875; // Calculated by xfov(360/5 degree) and 16/9 ratio
-    } else {
-        //self.pointOfView.camera.yFov = NYT360OptimalYFovForViewSize(viewSize);
-        self.pointOfView.camera.yFov = 42.1875 / 1.1;
-    }
-
     //self.pointOfView.camera.yFov = NYT360OptimalYFovForViewSize(viewSize);
+    
+    int screenRatio = viewSize.height / viewSize.width;
+    
+    if (screenRatio > 0.8 && screenRatio < 0.9) {
+        self.pointOfView.camera.yFov = NYT360OptimalYFovForViewSize(viewSize);
+    } else {
+        self.pointOfView.camera.yFov = 42.1875 / 1.1; // Calculated by xfov(360/5 degree) and 16/9 ratio
+    }
+    
     NSLog(@"x: %f, y: %f", self.pointOfView.camera.xFov, self.pointOfView.camera.yFov);
 }
 
