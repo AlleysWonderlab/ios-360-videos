@@ -187,6 +187,10 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     }];
 }
 
+- (void)updateCameraFOV {
+    [self.cameraController updateCameraFOV:self.view.bounds.size];
+}
+
 #pragma mark - SCNSceneRendererDelegate
 
 - (void)renderer:(id <SCNSceneRenderer>)renderer updateAtTime:(NSTimeInterval)time {
