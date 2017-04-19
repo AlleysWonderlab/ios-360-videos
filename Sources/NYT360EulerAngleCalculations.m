@@ -112,7 +112,7 @@ NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position
     // operators.
     position = NYT360AdjustPositionForAllowedAxes(position, allowedPanningAxes);
     
-    NSLog(@"posX: %f, posY: %f", position.x, position.y);
+    //NSLog(@"posX: %f, posY: %f", position.x, position.y);
     
     if (UIInterfaceOrientationIsLandscape(orientation)) {
         position.x = 3.14;
@@ -141,8 +141,8 @@ NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint posi
     
     // TODO: [jaredsinclair] Consider adding constants for the multipliers.
     
-    NSLog(@"posX: %f, posY: %f, %f, %f", position.x, position.y, rotateDelta.x, rotateDelta.y);
-    NSLog(@"width: %f, height: %f", viewSize.width, viewSize.height);
+    //NSLog(@"posX: %f, posY: %f, %f, %f", position.x, position.y, rotateDelta.x, rotateDelta.y);
+    //NSLog(@"width: %f, height: %f", viewSize.width, viewSize.height);
     
     // The y multiplier is 0.4 and not 0.5 because 0.5 felt too uncomfortable.
     position = CGPointMake(position.x + 2 * M_PI * rotateDelta.x / viewSize.width * 0.5,
@@ -153,7 +153,7 @@ NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint posi
     
     SCNVector3 eulerAngles = SCNVector3Make(position.y, position.x, 0);
     
-    NSLog(@"posX: %f, posY: %f", position.x, position.y);
+    //NSLog(@"posX: %f, posY: %f", position.x, position.y);
     
     return NYT360EulerAngleCalculationResultMake(position, eulerAngles);
 }
