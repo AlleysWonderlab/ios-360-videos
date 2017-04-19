@@ -25,7 +25,8 @@
     self.view.backgroundColor = [UIColor blackColor];
 
     // Create an AVPlayer for a 360º video:
-    NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-ivv.mp4"];
+    NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://dwknz3zfy9iu1.cloudfront.net/uscenes_h-264_hd_test.mp4"];
+    //NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-ivv.mp4"];
     self.player = [[AVPlayer alloc] initWithURL:videoURL];
 
     // Create a NYT360ViewController with the AVPlayer and our app's motion manager:

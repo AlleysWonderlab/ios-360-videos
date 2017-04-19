@@ -65,7 +65,8 @@ NYT360EulerAngleCalculationResult NYT360UpdatedPositionAndAnglesForAllowedAxes(C
 
 NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position, CMRotationRate rotationRate, UIInterfaceOrientation orientation, NYT360PanningAxis allowedPanningAxes, CGFloat noiseThreshold) {
     
-    static CGFloat NYT360EulerAngleCalculationRotationRateDampingFactor = 0.02;
+    static CGFloat NYT360EulerAngleCalculationRotationRateDampingFactor = 0.01;
+    //static CGFloat NYT360EulerAngleCalculationRotationRateDampingFactor = 0.02;
     
     // On some devices, the rotation rates exhibit a low-level drift on one or
     // more rotation axes. The symptom expressions are not identical, but they
@@ -96,23 +97,40 @@ NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position
         if (orientation == UIInterfaceOrientationLandscapeLeft) {
             position = CGPointMake(position.x + rotationRate.x * damping * -1,
                                    position.y + rotationRate.y * damping);
-        }
-        else {
+        } else {
             position = CGPointMake(position.x + rotationRate.x * damping,
                                    position.y + rotationRate.y * damping * -1);
         }
-    }
-    else {
+    } else {
         position = CGPointMake(position.x + rotationRate.y * damping,
                                position.y - rotationRate.x * damping * -1);
     }
-    position = CGPointMake(position.x,
-                           NYT360Clamp(position.y, -M_PI / 2, M_PI / 2));
+    position = CGPointMake(position.x, NYT360Clamp(position.y, -M_PI / 2, M_PI / 2));
     
     // Zero-out these values here rather than above, since that would over-
     // complicate the if/else logic or require unreadable numbers of ternary
     // operators.
     position = NYT360AdjustPositionForAllowedAxes(position, allowedPanningAxes);
+    
+    NSLog(@"posX: %f, posY: %f", position.x, position.y);
+    
+    if (UIInterfaceOrientationIsLandscape(orientation)) {
+        position.x = 3.14;
+        
+        /*
+        if (position.x > 3.20) {
+            position.x = 3.20;
+        } else if (position.x < 3.08) {
+            position.x = 3.08;
+        }
+         */
+    } else {
+        if (position.x > 3.57) {
+            position.x = 3.57;
+        } else if (position.x < 2.71) {
+            position.x = 2.71;
+        }
+    }
     
     SCNVector3 eulerAngles = SCNVector3Make(position.y, position.x, 0);
     
@@ -123,6 +141,9 @@ NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint posi
     
     // TODO: [jaredsinclair] Consider adding constants for the multipliers.
     
+    NSLog(@"posX: %f, posY: %f, %f, %f", position.x, position.y, rotateDelta.x, rotateDelta.y);
+    NSLog(@"width: %f, height: %f", viewSize.width, viewSize.height);
+    
     // The y multiplier is 0.4 and not 0.5 because 0.5 felt too uncomfortable.
     position = CGPointMake(position.x + 2 * M_PI * rotateDelta.x / viewSize.width * 0.5,
                            position.y + 2 * M_PI * rotateDelta.y / viewSize.height * 0.4);
@@ -131,6 +152,8 @@ NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint posi
     position = NYT360AdjustPositionForAllowedAxes(position, allowedPanningAxes);
     
     SCNVector3 eulerAngles = SCNVector3Make(position.y, position.x, 0);
+    
+    NSLog(@"posX: %f, posY: %f", position.x, position.y);
     
     return NYT360EulerAngleCalculationResultMake(position, eulerAngles);
 }
