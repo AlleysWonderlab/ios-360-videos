@@ -85,7 +85,7 @@
         _player = player;
         
         _camera = [SCNCamera new];
-        _camera.wantsHDR = YES;
+        //_camera.wantsHDR = YES;
         _camera.automaticallyAdjustsZRange = YES;
         
         _cameraNode = ({
