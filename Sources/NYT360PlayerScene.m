@@ -170,7 +170,6 @@
         // Prior to iOS 10, SceneKit prefers to use `setPaused:` alone to toggle
         // playback on a video node. Mimic this usage here to ensure consistency
         // and avoid putting the player into an out-of-sync state.
-        [self.player play];
         self.videoNode.paused = NO;
     }
     
