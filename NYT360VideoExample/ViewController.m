@@ -25,8 +25,9 @@
     self.view.backgroundColor = [UIColor blackColor];
 
     // Create an AVPlayer for a 360º video:
-    NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://dwknz3zfy9iu1.cloudfront.net/uscenes_h-264_hd_test.mp4"];
-    //NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-ivv.mp4"];
+    //NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://dwknz3zfy9iu1.cloudfront.net/uscenes_h-264_hd_test.mp4"]; // 1080
+    NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"]; // 720
+    //NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-ivv.mp4"]
     self.player = [[AVPlayer alloc] initWithURL:videoURL];
 
     // Create a NYT360ViewController with the AVPlayer and our app's motion manager:
@@ -40,6 +41,8 @@
 
     // Begin playing the 360º video:
     [self.player play];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.player.currentItem];
 
     // In this example, tapping the video will place the horizon in the middle of the screen:
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(reorientVerticalCameraAngle:)];
@@ -48,6 +51,12 @@
 
 - (void)reorientVerticalCameraAngle:(id)sender {
     [self.nyt360VC reorientVerticalCameraAngleToHorizon:YES];
+}
+
+- (void)itemDidFinishPlaying:(NSNotification *) notification {
+    NSLog(@"itemDidFinishPlaying");
+    [self.player seekToTime:CMTimeMake(0.0, 1.0)];
+    [self.player play];
 }
 
 @end
