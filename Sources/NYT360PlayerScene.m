@@ -63,6 +63,8 @@
 @property (nonatomic, assign) BOOL videoPlaybackIsPaused;
 @property (nonatomic, readonly) SCNNode *cameraNode;
 @property (nonatomic, readonly) NYTSKVideoNode *videoNode;
+@property (nonatomic, readonly) SKSpriteNode *leftNode;
+@property (nonatomic, readonly) SKSpriteNode *rightNode;
 @property (nonatomic, readonly) AVPlayer *player;
 
 @end
@@ -77,6 +79,21 @@
         
         int tubeRadius = 100.0;
         int tubeHeight = (2 * M_PI * tubeRadius / 5.0) * (9.0 / 16.0);
+        
+        int sceneWidth = 3 * width;
+        int sceneHeight = height;
+        
+        int nodeWidth = sceneWidth / 5;
+        int nodeHeight = sceneHeight;
+        
+        int nodeCenterX = sceneWidth / 2;
+        int nodeCenterY = sceneHeight / 2;
+        
+        
+        NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-ivv.mp4"];
+        AVPlayer *secondPlayer = [[AVPlayer alloc] initWithURL:videoURL];
+        [secondPlayer play];
+        
         
         NSLog(@"%i", tubeHeight);
         
@@ -97,36 +114,143 @@
         [self.rootNode addChildNode:_cameraNode];
         
         SKScene *skScene = ({
-            SKScene *scene = [[SKScene alloc] initWithSize:CGSizeMake(3 * width, height)];
+            SKScene *scene = [[SKScene alloc] initWithSize:CGSizeMake(sceneWidth, sceneHeight)];
             scene.shouldRasterize = YES;
             scene.scaleMode = SKSceneScaleModeAspectFit;
+            
             _videoNode = ({
                 NYTSKVideoNode *videoNode = [[NYTSKVideoNode alloc] initWithAVPlayer:player];
                 NSLog(@"%f, %f", scene.size.width, scene.size.height);
-                videoNode.position = CGPointMake(scene.size.width / 2, scene.size.height / 2);
-                videoNode.size = CGSizeMake(scene.size.width / 5, scene.size.height); // 28mm == 75 degree ~= 360/5 degree
+                videoNode.size = CGSizeMake(nodeWidth, nodeHeight); // 28mm == 75 degree ~= 360/5 degree
+                videoNode.position = CGPointMake(nodeCenterX, nodeCenterY);
                 videoNode.yScale = -1;
                 videoNode.xScale = 1;
                 videoNode.nyt_delegate = self;
                 videoNode;
             });
             [scene addChild:_videoNode];
+            _leftNode = ({
+                SKSpriteNode *node = [SKSpriteNode spriteNodeWithColor:UIColor.greenColor size:CGSizeMake(nodeWidth, nodeHeight)];
+                node.position = CGPointMake(nodeCenterX - nodeWidth, nodeCenterY);
+                //node.eulerAngles = SCNVector3Make(0.0, 1.3, 0.0);
+                node;
+            });
+            [scene addChild:_leftNode];
+            _rightNode = ({
+                //SKSpriteNode *node = [SKSpriteNode spriteNodeWithColor:UIColor.redColor size:CGSizeMake(nodeWidth, nodeHeight)];
+                //node.position = CGPointMake(nodeCenterX + nodeWidth, nodeCenterY);
+                //node;
+                
+                NYTSKVideoNode *node = [[NYTSKVideoNode alloc] initWithAVPlayer:secondPlayer];
+                node.size = CGSizeMake(nodeWidth, nodeHeight); // 28mm == 75 degree ~= 360/5 degree
+                node.position = CGPointMake(nodeCenterX + nodeWidth, nodeCenterY);
+                node.yScale = -1;
+                node.xScale = 1;
+                node;
+            });
+            [scene addChild:_rightNode];
+            
             scene;
         });
         
-        SCNNode *sphereNode = ({
-            SCNNode *sphereNode = [SCNNode new];
-            sphereNode.position = SCNVector3Make(0, 0, 0);
-            sphereNode.geometry = [SCNTube tubeWithInnerRadius:tubeRadius outerRadius:(tubeRadius + 0.1) height:tubeHeight];
+        SCNNode *videoScreenNode = ({
+            SCNNode *node = [SCNNode new];
+            node.position = SCNVector3Make(0, 0, 0);
+            node.geometry = [SCNTube tubeWithInnerRadius:tubeRadius outerRadius:(tubeRadius + 0.1) height:tubeHeight];
             //sphereNode.geometry = [SCNTube tubeWithInnerRadius:tubeRadius outerRadius:(tubeRadius + 0.1) height:74.25 / 2];
-            //sphereNode.geometry = [SCNSphere sphereWithRadius:100.0]; //TODO [DZ]: What is the correct size here?
-            sphereNode.geometry.firstMaterial.diffuse.contents = skScene;
-            sphereNode.geometry.firstMaterial.diffuse.minificationFilter = SCNFilterModeLinear;
-            sphereNode.geometry.firstMaterial.diffuse.magnificationFilter = SCNFilterModeLinear;
-            sphereNode.geometry.firstMaterial.doubleSided = NO;
-            sphereNode;
+            //node.geometry = [SCNSphere sphereWithRadius:100.0]; //TODO [DZ]: What is the correct size here?
+            node.geometry.firstMaterial.diffuse.contents = skScene;
+            node.geometry.firstMaterial.diffuse.minificationFilter = SCNFilterModeLinear;
+            node.geometry.firstMaterial.diffuse.magnificationFilter = SCNFilterModeLinear;
+            node.geometry.firstMaterial.doubleSided = NO;
+            
+            //NSLog(@"GeoCount: %d", node.geometry.geometryElementCount);
+            
+            node;
         });
-        [self.rootNode addChildNode:sphereNode];
+        [self.rootNode addChildNode:videoScreenNode];
+        
+        
+        
+        /*
+        SKScene *leftSkScene = ({
+            SKScene *scene = [[SKScene alloc] initWithSize:CGSizeMake(3 * width, height)];
+            scene.shouldRasterize = YES;
+            scene.scaleMode = SKSceneScaleModeAspectFit;
+            _leftNode = ({
+                SKSpriteNode *node = [SKSpriteNode spriteNodeWithColor:UIColor.greenColor size:CGSizeMake(scene.size.width / 5, scene.size.height)];
+                node.position = CGPointMake(scene.size.width / 2, scene.size.height / 2);
+                node;
+            });
+            [scene addChild:_leftNode];
+            scene;
+        });
+        
+        SCNNode *leftVideoNode = ({
+            SCNNode *node = [SCNNode new];
+            node.position = SCNVector3Make(0, 0, 0);
+            node.eulerAngles = SCNVector3Make(0.0, 1.3, 0.0);
+            //node.rotation = SCNVector4Make(1, 0, 0, 0);
+            node.geometry = [SCNTube tubeWithInnerRadius:tubeRadius-1.0 outerRadius:(tubeRadius - 0.9) height:tubeHeight];
+            //sphereNode.geometry = [SCNTube tubeWithInnerRadius:tubeRadius outerRadius:(tubeRadius + 0.1) height:74.25 / 2];
+            //node.geometry = [SCNSphere sphereWithRadius:100.0]; //TODO [DZ]: What is the correct size here?
+            node.geometry.firstMaterial.diffuse.contents = leftSkScene;
+            node.geometry.firstMaterial.transparency = 0.5;
+            node.geometry.firstMaterial.diffuse.minificationFilter = SCNFilterModeLinear;
+            node.geometry.firstMaterial.diffuse.magnificationFilter = SCNFilterModeLinear;
+            node.geometry.firstMaterial.doubleSided = NO;
+            
+            //NSLog(@"GeoCount: %d", node.geometry.geometryElementCount);
+            
+            node;
+        });
+        [self.rootNode addChildNode:leftVideoNode];
+         */
+        
+        
+        /*
+        SCNNode *wireNode = ({
+            SCNSphere *sphere = [SCNSphere sphereWithRadius:tubeRadius + 1.5];
+            sphere.firstMaterial.diffuse.contents = UIColor.redColor;
+            sphere.firstMaterial.doubleSided = YES;
+            sphere.segmentCount = 12;
+            [sphere setGeodesic:YES];
+            
+            SCNNode *node = [SCNNode new];
+            node.position = SCNVector3Make(0, 0, 0);
+            node.geometry = sphere;
+            
+            //NSLog(@"GeoCount: %d", node.geometry.geometryElementCount);
+            
+            node;
+        });
+        [self.rootNode addChildNode:wireNode];
+         */
+        
+        /*
+        SCNNode *wireNode = ({
+            SCNCylinder *geo = [SCNCylinder cylinderWithRadius:tubeRadius + 1.0 height:20];
+            //geo.radialSegmentCount = 12;
+            NSArray *materials = [NSArray array];
+            materials = [materials arrayByAddingObject:UIColor.blueColor];
+            materials = [materials arrayByAddingObject:UIColor.redColor];
+            materials = [materials arrayByAddingObject:UIColor.greenColor];
+
+            geo.materials = materials;
+            //geo.firstMaterial.diffuse.contents = skScene;
+            //geo.firstMaterial.doubleSided = YES;
+            
+            SCNNode *node = [SCNNode new];
+            node.position = SCNVector3Make(0, 0, 0);
+            node.geometry = geo;
+            
+            NSLog(@"GeoCount: %d", geo.geometryElementCount);
+            
+            node;
+        });
+        [self.rootNode addChildNode:wireNode];
+         */
+
         
         view.scene = self;
         view.pointOfView = self.cameraNode;

@@ -31,6 +31,11 @@ CGRect NYT360ViewControllerSceneFrameForContainingBounds(CGRect containingBounds
     targetFrame.origin.x = (containingBounds.size.width - targetSize.width) / 2.0;
     targetFrame.origin.y = (containingBounds.size.height - targetSize.height) / 2.0;
     
+    
+    NSLog(@"A %f, %f", containingSize.width, containingSize.height);
+    NSLog(@"B %f, %f", underlyingSceneSize.width, underlyingSceneSize.height);
+    NSLog(@"C %f, %f", targetSize.width, targetSize.height);
+    
     return targetFrame;
 }
 

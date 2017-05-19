@@ -49,10 +49,10 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
         _pointOfView = view.pointOfView;
         _view = view;
         _currentPosition = CGPointMake(3.14, 0);
-        _allowedDeviceMotionPanningAxes = NYT360PanningAxisHorizontal;
-        _allowedPanGesturePanningAxes = NYT360PanningAxisHorizontal;
-        //_allowedDeviceMotionPanningAxes = NYT360PanningAxisHorizontal | NYT360PanningAxisVertical;
-        //_allowedPanGesturePanningAxes = NYT360PanningAxisHorizontal | NYT360PanningAxisVertical;
+        //_allowedDeviceMotionPanningAxes = NYT360PanningAxisHorizontal;
+        //_allowedPanGesturePanningAxes = NYT360PanningAxisHorizontal;
+        _allowedDeviceMotionPanningAxes = NYT360PanningAxisHorizontal | NYT360PanningAxisVertical;
+        _allowedPanGesturePanningAxes = NYT360PanningAxisHorizontal | NYT360PanningAxisVertical;
         
         _panRecognizer = [[NYT360CameraPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
         _panRecognizer.delegate = self;
@@ -135,7 +135,8 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
         float xFov = 360.0 / 5.0;
         self.pointOfView.camera.yFov = xFov * screenRatio;
     } else {
-        self.pointOfView.camera.yFov = 42.1875 / 1.1; // Calculated by xfov(360/5 degree) and 16/9 ratio
+        //self.pointOfView.camera.yFov = 42.1875 / 1.1; // Calculated by xfov(360/5 degree) and 16/9 ratio
+        self.pointOfView.camera.yFov = 42.1875 / 0.5; // Calculated by xfov(360/5 degree) and 16/9 ratio
     }
     
     NSLog(@"x: %f, y: %f", self.pointOfView.camera.xFov, self.pointOfView.camera.yFov);
