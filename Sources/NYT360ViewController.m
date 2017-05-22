@@ -77,6 +77,10 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
             }
 
             [strongSelf.delegate nyt360ViewController:strongSelf didUpdateCompassAngle:strongSelf.compassAngle];
+            
+            if (strongSelf.focusUpdated) {
+                [strongSelf.delegate nyt360ViewController:strongSelf focusedNode:strongSelf.focusedNode];
+            }
         };
 
     }
@@ -102,6 +106,26 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 - (float)compassAngle {
     return self.cameraController.compassAngle;
 }
+
+- (BOOL)focusUpdated {
+    int node = 0;
+    
+    if (self.cameraController.compassAngle > -3.00) {
+        node = 90;
+    } else if (self.cameraController.compassAngle < -3.28) {
+        node = -90;
+    } else {
+        node = 0;
+    }
+    
+    if (node != self.focusedNode) {
+        self.focusedNode = node;
+        return true;
+    } else {
+        return false;
+    }
+}
+
 
 - (NYT360CameraPanGestureRecognizer *)panRecognizer {
     return self.cameraController.panRecognizer;
@@ -211,5 +235,6 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 - (void)cameraController:(NYT360CameraController *)controller userInitallyMovedCameraViaMethod:(NYT360UserInteractionMethod)method {
     [self.delegate videoViewController:self userInitallyMovedCameraViaMethod:method];
 }
+
 
 @end

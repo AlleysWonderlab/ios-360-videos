@@ -353,6 +353,8 @@
 }
 
 - (void)addNode:(NSString*)urlString degree:(int)degree {
+    [self pause];
+    
     int sceneWidth = 3 * WIDTH;
     int sceneHeight = HEIGHT;
     

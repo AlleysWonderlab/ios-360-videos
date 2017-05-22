@@ -30,10 +30,16 @@
     //NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-ivv.mp4"];
     //NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-navi.mp4"];
     self.player = [[AVPlayer alloc] initWithURL:videoURL];
+    
+    
 
     // Create a NYT360ViewController with the AVPlayer and our app's motion manager:
     id<NYT360MotionManagement> const manager = [NYT360MotionManager sharedManager];
     self.nyt360VC = [[NYT360ViewController alloc] initWithAVPlayer:self.player motionManager:manager];
+    
+    
+    self.nyt360VC.delegate = self;
+    
 
     // Embed the player view controller in our UI, via view controller containment:
     [self addChildViewController:self.nyt360VC];
@@ -54,9 +60,17 @@
     [button addTarget:self
                action:@selector(addRightNode:)
      forControlEvents:UIControlEventTouchUpInside];
-    [button setTitle:@"Show View" forState:UIControlStateNormal];
+    [button setTitle:@"Add Node" forState:UIControlStateNormal];
     button.frame = CGRectMake(80.0, 210.0, 160.0, 40.0);
     [self.view addSubview:button];
+    
+    UIButton *playButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [playButton addTarget:self
+               action:@selector(play:)
+     forControlEvents:UIControlEventTouchUpInside];
+    [playButton setTitle:@"Play" forState:UIControlStateNormal];
+    playButton.frame = CGRectMake(280.0, 60.0, 160.0, 40.0);
+    [self.view addSubview:playButton];
 }
 
 - (void)reorientVerticalCameraAngle:(id)sender {
@@ -77,5 +91,23 @@
     [self.nyt360VC addNode:rightUrl degree:-90];
 }
 
+- (IBAction)play:(id)sender {
+    [self.nyt360VC play];
+}
+
+
+#pragma mark - NYT360ViewControllerDelegate
+- (void)nyt360ViewController:(NYT360ViewController *)viewController didUpdateCompassAngle:(float)compassAngle {
+    //NSLog(@"didUpdateCompassAngle");
+    //NSLog(@"didUpdateCompassAngle %f", compassAngle);
+}
+
+- (void)videoViewController:(NYT360ViewController *)viewController userInitallyMovedCameraViaMethod:(NYT360UserInteractionMethod)method {
+    NSLog(@"userInitallyMovedCameraViaMethod");
+}
+
+- (void)nyt360ViewController:(NYT360ViewController *)viewController focusedNode:(int)degree {
+    NSLog(@"focusedNode %d", degree);
+}
 
 @end

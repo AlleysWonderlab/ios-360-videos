@@ -41,6 +41,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)videoViewController:(NYT360ViewController *)viewController userInitallyMovedCameraViaMethod:(NYT360UserInteractionMethod)method;
 
+/**
+ *  Called when camera angle focus on node.
+ */
+- (void)nyt360ViewController:(NYT360ViewController *)viewController focusedNode:(int)degree;
+
 @end
 
 /**
@@ -92,6 +97,9 @@ NS_ASSUME_NONNULL_BEGIN
  *  The value will be within the range of plus or minus one radian, non-inclusive, where a positive value is equivalent to a clockwise rotation.
  */
 @property (nonatomic, readonly) float compassAngle;
+
+@property (nonatomic, assign) int focusedNode;
+@property (nonatomic, readonly) BOOL focusUpdated;
 
 /**
  *  An otherwise vanilla subclass of UIPanGestureRecognizer used by NYT360Video to enable manual camera panning. This class is exposed so that host applications can more easily configure interaction with other gesture recognizers without having to have references to specific instances of an NYT360Video pan recognizer.
