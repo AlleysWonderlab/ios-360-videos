@@ -93,8 +93,8 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     [self.playerScene pause];
 }
 
-- (void)addNode:(int)degree {
-    [self.playerScene addNode:degree];
+- (void)addNode:(NSString*)urlString degree:(int)degree {
+    [self.playerScene addNode:urlString degree:degree];
 }
 
 #pragma mark - Camera Movement

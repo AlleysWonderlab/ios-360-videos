@@ -81,7 +81,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Add Branch node
  */
-- (void)addNode:(int)degree;
+- (void)addNode:(NSString*)urlString degree:(int)degree;
 
 
 #pragma mark - Camera Movement

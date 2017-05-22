@@ -352,7 +352,7 @@
     
 }
 
-- (void)addNode:(int)degree {
+- (void)addNode:(NSString*)urlString degree:(int)degree {
     int sceneWidth = 3 * WIDTH;
     int sceneHeight = HEIGHT;
     
@@ -362,22 +362,27 @@
     int nodeCenterX = sceneWidth / 2;
     int nodeCenterY = sceneHeight / 2;
     
-    
-    NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-ivv.mp4"];
-    AVPlayer *secondPlayer = [[AVPlayer alloc] initWithURL:videoURL];
-    [secondPlayer play];
+    NSData* imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]];
+    UIImage* thumbnail = [UIImage imageWithData:imageData];
+
     
     if (degree > 0) {
         _rightNode = ({
-            SKSpriteNode *node = [SKSpriteNode spriteNodeWithColor:UIColor.redColor size:CGSizeMake(nodeWidth, nodeHeight)];
+            SKSpriteNode *node = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImage:thumbnail]];
+            node.size = CGSizeMake(nodeWidth, nodeHeight);
             node.position = CGPointMake(nodeCenterX + nodeWidth, nodeCenterY);
+            node.yScale = -1;
+            node.xScale = 1;
             node;
         });
         [_skScene addChild:_rightNode];
     } else {
         _leftNode = ({
-            SKSpriteNode *node = [SKSpriteNode spriteNodeWithColor:UIColor.greenColor size:CGSizeMake(nodeWidth, nodeHeight)];
+            SKSpriteNode *node = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImage:thumbnail]];
+            node.size = CGSizeMake(nodeWidth, nodeHeight);
             node.position = CGPointMake(nodeCenterX - nodeWidth, nodeCenterY);
+            node.yScale = -1;
+            node.xScale = 1;
             node;
         });
         [_skScene addChild:_leftNode];

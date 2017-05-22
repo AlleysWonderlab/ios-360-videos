@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)pause;
 
-- (void)addNode:(int)degree;
+- (void)addNode:(NSString*)urlString degree:(int)degree;
 
 @end
 
