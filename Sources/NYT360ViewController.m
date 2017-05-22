@@ -102,6 +102,13 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     [self.cameraController setBranchMode:true];
 }
 
+- (void)selectBranch:(NSString*)videoUrl {
+    [self.playerScene replaceVideo:videoUrl];
+    [self.playerScene removeBranchNodes];
+    [self.cameraController setBranchMode:false];
+    [self play];
+}
+
 #pragma mark - Camera Movement
 
 - (float)compassAngle {

@@ -145,6 +145,7 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
 
 - (void)setBranchMode:(BOOL)enable {
     self.isBranchMode = enable;
+    //[self reorientVerticalCameraAngleToHorizon:true];
 }
 
 - (void)reorientVerticalCameraAngleToHorizon:(BOOL)animated {

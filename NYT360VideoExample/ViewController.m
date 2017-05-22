@@ -92,7 +92,8 @@
 }
 
 - (IBAction)play:(id)sender {
-    [self.nyt360VC play];
+    [self.nyt360VC selectBranch:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-ivv.mp4"];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.player.currentItem];
 }
 
 

@@ -390,7 +390,17 @@
         [_skScene addChild:_leftNode];
     }
 }
-    
+
+- (void)replaceVideo:(NSString*)videoUrl {
+    NSURL * const url = [[NSURL alloc] initWithString:videoUrl];
+    AVPlayerItem *item = [AVPlayerItem playerItemWithURL:url];
+    [_player replaceCurrentItemWithPlayerItem:item];
+}
+
+- (void)removeBranchNodes {
+    [_skScene removeChildrenInArray:[NSArray arrayWithObjects:_leftNode, _rightNode, nil]];
+}
+
 #pragma mark - NYTSKVideoNodeDelegate
 
 - (BOOL)videoNodeShouldAllowPlaybackToBegin:(NYTSKVideoNode *)videoNode {
