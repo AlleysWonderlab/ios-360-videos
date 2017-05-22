@@ -78,6 +78,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)pause;
 
+/**
+ *  Add Branch node
+ */
+- (void)addNode:(int)degree;
+
+
 #pragma mark - Camera Movement
 
 /**

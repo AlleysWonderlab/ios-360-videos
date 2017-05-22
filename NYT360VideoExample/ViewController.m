@@ -48,6 +48,15 @@
     // In this example, tapping the video will place the horizon in the middle of the screen:
     UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(reorientVerticalCameraAngle:)];
     [self.view addGestureRecognizer:tapRecognizer];
+    
+    
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    [button addTarget:self
+               action:@selector(addRightNode:)
+     forControlEvents:UIControlEventTouchUpInside];
+    [button setTitle:@"Show View" forState:UIControlStateNormal];
+    button.frame = CGRectMake(80.0, 210.0, 160.0, 40.0);
+    [self.view addSubview:button];
 }
 
 - (void)reorientVerticalCameraAngle:(id)sender {
@@ -59,5 +68,11 @@
     [self.player seekToTime:CMTimeMake(0.0, 1.0)];
     [self.player play];
 }
+
+- (IBAction)addRightNode:(id)sender {
+    [self.nyt360VC addNode:90];
+    [self.nyt360VC addNode:-90];
+}
+
 
 @end

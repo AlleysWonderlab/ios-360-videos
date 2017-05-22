@@ -11,6 +11,11 @@
 
 #import "NYT360PlayerScene.h"
 
+#define WIDTH 1280
+#define HEIGHT 720
+#define RADIUS 100.0
+
+
 @class NYTSKVideoNode;
 
 ///-----------------------------------------------------------------------------
@@ -63,8 +68,9 @@
 @property (nonatomic, assign) BOOL videoPlaybackIsPaused;
 @property (nonatomic, readonly) SCNNode *cameraNode;
 @property (nonatomic, readonly) NYTSKVideoNode *videoNode;
-@property (nonatomic, readonly) SKSpriteNode *leftNode;
-@property (nonatomic, readonly) SKSpriteNode *rightNode;
+@property (nonatomic, readonly) SKScene *skScene;
+@property (nonatomic, readonly) SKNode *leftNode;
+@property (nonatomic, readonly) SKNode *rightNode;
 @property (nonatomic, readonly) AVPlayer *player;
 
 @end
@@ -74,25 +80,16 @@
 - (instancetype)initWithAVPlayer:(AVPlayer *)player boundToView:(SCNView *)view {
     if ((self = [super init])) {
         
-        int width = 1280;
-        int height = 720;
+        int tubeHeight = (2 * M_PI * RADIUS / 5.0) * (9.0 / 16.0);
         
-        int tubeRadius = 100.0;
-        int tubeHeight = (2 * M_PI * tubeRadius / 5.0) * (9.0 / 16.0);
-        
-        int sceneWidth = 3 * width;
-        int sceneHeight = height;
+        int sceneWidth = 3 * WIDTH;
+        int sceneHeight = HEIGHT;
         
         int nodeWidth = sceneWidth / 5;
         int nodeHeight = sceneHeight;
         
         int nodeCenterX = sceneWidth / 2;
         int nodeCenterY = sceneHeight / 2;
-        
-        
-        NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-ivv.mp4"];
-        AVPlayer *secondPlayer = [[AVPlayer alloc] initWithURL:videoURL];
-        [secondPlayer play];
         
         
         NSLog(@"%i", tubeHeight);
@@ -113,7 +110,7 @@
         });
         [self.rootNode addChildNode:_cameraNode];
         
-        SKScene *skScene = ({
+        _skScene = ({
             SKScene *scene = [[SKScene alloc] initWithSize:CGSizeMake(sceneWidth, sceneHeight)];
             scene.shouldRasterize = YES;
             scene.scaleMode = SKSceneScaleModeAspectFit;
@@ -129,6 +126,8 @@
                 videoNode;
             });
             [scene addChild:_videoNode];
+            
+            /*
             _leftNode = ({
                 SKSpriteNode *node = [SKSpriteNode spriteNodeWithColor:UIColor.greenColor size:CGSizeMake(nodeWidth, nodeHeight)];
                 node.position = CGPointMake(nodeCenterX - nodeWidth, nodeCenterY);
@@ -136,6 +135,10 @@
                 node;
             });
             [scene addChild:_leftNode];
+             */
+            
+            
+            /*
             _rightNode = ({
                 //SKSpriteNode *node = [SKSpriteNode spriteNodeWithColor:UIColor.redColor size:CGSizeMake(nodeWidth, nodeHeight)];
                 //node.position = CGPointMake(nodeCenterX + nodeWidth, nodeCenterY);
@@ -149,6 +152,7 @@
                 node;
             });
             [scene addChild:_rightNode];
+            */
             
             scene;
         });
@@ -156,10 +160,10 @@
         SCNNode *videoScreenNode = ({
             SCNNode *node = [SCNNode new];
             node.position = SCNVector3Make(0, 0, 0);
-            node.geometry = [SCNTube tubeWithInnerRadius:tubeRadius outerRadius:(tubeRadius + 0.1) height:tubeHeight];
+            node.geometry = [SCNTube tubeWithInnerRadius:RADIUS outerRadius:(RADIUS + 0.1) height:tubeHeight];
             //sphereNode.geometry = [SCNTube tubeWithInnerRadius:tubeRadius outerRadius:(tubeRadius + 0.1) height:74.25 / 2];
             //node.geometry = [SCNSphere sphereWithRadius:100.0]; //TODO [DZ]: What is the correct size here?
-            node.geometry.firstMaterial.diffuse.contents = skScene;
+            node.geometry.firstMaterial.diffuse.contents = _skScene;
             node.geometry.firstMaterial.diffuse.minificationFilter = SCNFilterModeLinear;
             node.geometry.firstMaterial.diffuse.magnificationFilter = SCNFilterModeLinear;
             node.geometry.firstMaterial.doubleSided = NO;
@@ -348,6 +352,38 @@
     
 }
 
+- (void)addNode:(int)degree {
+    int sceneWidth = 3 * WIDTH;
+    int sceneHeight = HEIGHT;
+    
+    int nodeWidth = sceneWidth / 5;
+    int nodeHeight = sceneHeight;
+    
+    int nodeCenterX = sceneWidth / 2;
+    int nodeCenterY = sceneHeight / 2;
+    
+    
+    NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-ivv.mp4"];
+    AVPlayer *secondPlayer = [[AVPlayer alloc] initWithURL:videoURL];
+    [secondPlayer play];
+    
+    if (degree > 0) {
+        _rightNode = ({
+            SKSpriteNode *node = [SKSpriteNode spriteNodeWithColor:UIColor.redColor size:CGSizeMake(nodeWidth, nodeHeight)];
+            node.position = CGPointMake(nodeCenterX + nodeWidth, nodeCenterY);
+            node;
+        });
+        [_skScene addChild:_rightNode];
+    } else {
+        _leftNode = ({
+            SKSpriteNode *node = [SKSpriteNode spriteNodeWithColor:UIColor.greenColor size:CGSizeMake(nodeWidth, nodeHeight)];
+            node.position = CGPointMake(nodeCenterX - nodeWidth, nodeCenterY);
+            node;
+        });
+        [_skScene addChild:_leftNode];
+    }
+}
+    
 #pragma mark - NYTSKVideoNodeDelegate
 
 - (BOOL)videoNodeShouldAllowPlaybackToBegin:(NYTSKVideoNode *)videoNode {

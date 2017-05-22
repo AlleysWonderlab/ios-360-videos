@@ -93,6 +93,10 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     [self.playerScene pause];
 }
 
+- (void)addNode:(int)degree {
+    [self.playerScene addNode:degree];
+}
+
 #pragma mark - Camera Movement
 
 - (float)compassAngle {

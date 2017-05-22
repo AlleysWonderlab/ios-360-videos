@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)pause;
 
+- (void)addNode:(int)degree;
+
 @end
 
 NS_ASSUME_NONNULL_END
