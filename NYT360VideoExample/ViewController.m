@@ -98,8 +98,7 @@
 
 #pragma mark - NYT360ViewControllerDelegate
 - (void)nyt360ViewController:(NYT360ViewController *)viewController didUpdateCompassAngle:(float)compassAngle {
-    //NSLog(@"didUpdateCompassAngle");
-    //NSLog(@"didUpdateCompassAngle %f", compassAngle);
+    //NSLog(@"didUpdateCompassAngle %f", -compassAngle);
 }
 
 - (void)videoViewController:(NYT360ViewController *)viewController userInitallyMovedCameraViaMethod:(NYT360UserInteractionMethod)method {

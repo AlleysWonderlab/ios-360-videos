@@ -32,6 +32,7 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
 
 @property (nonatomic, assign) BOOL isAnimatingReorientation;
 @property (nonatomic, assign) BOOL hasReportedInitialCameraMovement;
+@property (nonatomic, assign) BOOL isBranchMode;
 
 @end
 
@@ -49,10 +50,10 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
         _pointOfView = view.pointOfView;
         _view = view;
         _currentPosition = CGPointMake(3.14, 0);
-        //_allowedDeviceMotionPanningAxes = NYT360PanningAxisHorizontal;
-        //_allowedPanGesturePanningAxes = NYT360PanningAxisHorizontal;
-        _allowedDeviceMotionPanningAxes = NYT360PanningAxisHorizontal | NYT360PanningAxisVertical;
-        _allowedPanGesturePanningAxes = NYT360PanningAxisHorizontal | NYT360PanningAxisVertical;
+        _allowedDeviceMotionPanningAxes = NYT360PanningAxisHorizontal;
+        _allowedPanGesturePanningAxes = NYT360PanningAxisHorizontal;
+        //_allowedDeviceMotionPanningAxes = NYT360PanningAxisHorizontal | NYT360PanningAxisVertical;
+        //_allowedPanGesturePanningAxes = NYT360PanningAxisHorizontal | NYT360PanningAxisVertical;
         
         _panRecognizer = [[NYT360CameraPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePan:)];
         _panRecognizer.delegate = self;
@@ -84,7 +85,7 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
 #pragma mark - Compass Angle
 
 - (float)compassAngle {
-    return NYT360CompassAngleForEulerAngles(self.pointOfView.eulerAngles, NYT360EulerAngleCalculationDefaultReferenceCompassAngle);
+    return NYT360CompassAngleForEulerAngles(self.pointOfView.eulerAngles, NYT360EulerAngleCalculationDefaultReferenceCompassAngle); // -6.28 - 0
 }
 
 #pragma mark - Camera Control
@@ -109,7 +110,7 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
 
     NYT360EulerAngleCalculationResult result;
-    result = NYT360DeviceMotionCalculation(self.currentPosition, rotationRate, orientation, self.allowedDeviceMotionPanningAxes, NYT360EulerAngleCalculationNoiseThresholdDefault);
+    result = NYT360DeviceMotionCalculation(self.currentPosition, rotationRate, orientation, self.allowedDeviceMotionPanningAxes, NYT360EulerAngleCalculationNoiseThresholdDefault, self.isBranchMode);
     self.currentPosition = result.position;
     self.pointOfView.eulerAngles = result.eulerAngles;
 
@@ -140,6 +141,10 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
     }
     
     NSLog(@"x: %f, y: %f", self.pointOfView.camera.xFov, self.pointOfView.camera.yFov);
+}
+
+- (void)setBranchMode:(BOOL)enable {
+    self.isBranchMode = enable;
 }
 
 - (void)reorientVerticalCameraAngleToHorizon:(BOOL)animated {

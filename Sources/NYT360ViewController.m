@@ -99,6 +99,7 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 
 - (void)addNode:(NSString*)urlString degree:(int)degree {
     [self.playerScene addNode:urlString degree:degree];
+    [self.cameraController setBranchMode:true];
 }
 
 #pragma mark - Camera Movement
@@ -108,14 +109,19 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 }
 
 - (BOOL)focusUpdated {
+    float compass = fabsf(self.cameraController.compassAngle);
+    float threshold = (2.0 * M_PI) / 5.0;
+    
     int node = 0;
     
-    if (self.cameraController.compassAngle > -3.00) {
+    if (M_PI - threshold < compass && compass < M_PI + threshold) {
+        node = 0;
+    } else if (M_PI - 2 * threshold < compass && compass < M_PI - threshold) {
         node = 90;
-    } else if (self.cameraController.compassAngle < -3.28) {
+    } else if (M_PI + threshold < compass && compass < M_PI + 2 * threshold) {
         node = -90;
     } else {
-        node = 0;
+        node = -360; // There is not focused node.
     }
     
     if (node != self.focusedNode) {

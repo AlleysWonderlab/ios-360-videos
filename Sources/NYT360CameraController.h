@@ -97,6 +97,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)updateCameraFOV:(CGSize)viewSize;
 
+- (void)setBranchMode:(BOOL)enable;
+
 /**
  *  Reorients the camera's vertical angle component so it's pointing directly at the horizon.
  *

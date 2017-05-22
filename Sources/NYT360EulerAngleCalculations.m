@@ -63,7 +63,7 @@ NYT360EulerAngleCalculationResult NYT360UpdatedPositionAndAnglesForAllowedAxes(C
     return NYT360EulerAngleCalculationResultMake(position, eulerAngles);
 }
 
-NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position, CMRotationRate rotationRate, UIInterfaceOrientation orientation, NYT360PanningAxis allowedPanningAxes, CGFloat noiseThreshold) {
+NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position, CMRotationRate rotationRate, UIInterfaceOrientation orientation, NYT360PanningAxis allowedPanningAxes, CGFloat noiseThreshold, BOOL branchMode) {
     
     static CGFloat NYT360EulerAngleCalculationRotationRateDampingFactor = 0.01;
     //static CGFloat NYT360EulerAngleCalculationRotationRateDampingFactor = 0.02;
@@ -114,23 +114,26 @@ NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position
     
     //NSLog(@"posX: %f, posY: %f", position.x, position.y);
     
-    if (UIInterfaceOrientationIsLandscape(orientation)) {
-        position.x = 3.14;
-        
-        /*
-        if (position.x > 3.20) {
-            position.x = 3.20;
-        } else if (position.x < 3.08) {
-            position.x = 3.08;
-        }
-         */
-    } else {
-        if (position.x > 3.57) {
-            position.x = 3.57;
-        } else if (position.x < 2.71) {
-            position.x = 2.71;
+    if (branchMode == false) {
+        if (UIInterfaceOrientationIsLandscape(orientation)) {
+            position.x = 3.14;
+            
+            /*
+             if (position.x > 3.20) {
+             position.x = 3.20;
+             } else if (position.x < 3.08) {
+             position.x = 3.08;
+             }
+             */
+        } else {
+             if (position.x > 3.57) {
+                 position.x = 3.57;
+             } else if (position.x < 2.71) {
+                 position.x = 2.71;
+             }
         }
     }
+
     
     SCNVector3 eulerAngles = SCNVector3Make(position.y, position.x, 0);
     
