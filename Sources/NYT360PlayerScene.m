@@ -66,9 +66,10 @@
 @interface NYT360PlayerScene () <NYTSKVideoNodeDelegate>
 
 @property (nonatomic, assign) BOOL videoPlaybackIsPaused;
+@property (nonatomic, readonly) SKScene *skScene;
 @property (nonatomic, readonly) SCNNode *cameraNode;
 @property (nonatomic, readonly) NYTSKVideoNode *videoNode;
-@property (nonatomic, readonly) SKScene *skScene;
+@property (nonatomic, readonly) SKNode *videoThumbnailNode;
 @property (nonatomic, readonly) SKNode *leftNode;
 @property (nonatomic, readonly) SKNode *rightNode;
 @property (nonatomic, readonly) AVPlayer *player;
@@ -395,11 +396,34 @@
     NSURL * const url = [[NSURL alloc] initWithString:videoUrl];
     AVPlayerItem *item = [AVPlayerItem playerItemWithURL:url];
     [_player replaceCurrentItemWithPlayerItem:item];
+    
+    
+    
+    int sceneWidth = 3 * WIDTH;
+    int sceneHeight = HEIGHT;
+    
+    int nodeWidth = sceneWidth / 5;
+    int nodeHeight = sceneHeight;
+    
+    int nodeCenterX = sceneWidth / 2;
+    int nodeCenterY = sceneHeight / 2;
+    
+    _videoNode = ({
+        NYTSKVideoNode *videoNode = [[NYTSKVideoNode alloc] initWithAVPlayer:_player];
+        videoNode.size = CGSizeMake(nodeWidth, nodeHeight); // 28mm == 75 degree ~= 360/5 degree
+        videoNode.position = CGPointMake(nodeCenterX, nodeCenterY);
+        videoNode.yScale = -1;
+        videoNode.xScale = 1;
+        videoNode.nyt_delegate = self;
+        videoNode;
+    });
+    [_skScene addChild:_videoNode];
 }
 
 - (void)removeBranchNodes {
     NSMutableArray *nodes = [[NSMutableArray alloc] init];
     
+    if (_videoNode != nil) { [nodes addObject: _videoNode]; }
     if (_leftNode != nil) { [nodes addObject: _leftNode]; }
     if (_rightNode != nil) { [nodes addObject: _rightNode]; }
     
