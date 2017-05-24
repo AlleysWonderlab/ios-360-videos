@@ -106,9 +106,7 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     if ([videoUrl length] > 0) {
         [self.playerScene replaceVideo:videoUrl];
     }
-    [self.playerScene removeBranchNodes];
-    [self.cameraController setBranchMode:false];
-    [self play];
+    [self offBranchMode];
 }
 
 - (void)offBranchMode {
