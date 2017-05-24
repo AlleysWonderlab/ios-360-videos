@@ -398,7 +398,7 @@
 }
 
 - (void)removeBranchNodes {
-    NSMutableArray *nodes = [NSMutableArray alloc];
+    NSMutableArray *nodes = [[NSMutableArray alloc] init];
     
     if (_leftNode != nil) { [nodes addObject: _leftNode]; }
     if (_rightNode != nil) { [nodes addObject: _rightNode]; }
