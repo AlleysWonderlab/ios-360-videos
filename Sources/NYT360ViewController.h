@@ -88,7 +88,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)addNode:(NSString*)urlString degree:(int)degree;
 - (void)selectBranch:(NSString*)videoUrl;
-
+- (void)offBranchMode;
 
 #pragma mark - Camera Movement
 
