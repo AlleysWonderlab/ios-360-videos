@@ -398,6 +398,8 @@
     [_player replaceCurrentItemWithPlayerItem:item];
     
     
+    [_skScene removeAllChildren];
+    
     
     int sceneWidth = 3 * WIDTH;
     int sceneHeight = HEIGHT;
@@ -423,7 +425,6 @@
 - (void)removeBranchNodes {
     NSMutableArray *nodes = [[NSMutableArray alloc] init];
     
-    if (_videoNode != nil) { [nodes addObject: _videoNode]; }
     if (_leftNode != nil) { [nodes addObject: _leftNode]; }
     if (_rightNode != nil) { [nodes addObject: _rightNode]; }
     
