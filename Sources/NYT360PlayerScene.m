@@ -398,7 +398,12 @@
 }
 
 - (void)removeBranchNodes {
-    [_skScene removeChildrenInArray:[NSArray arrayWithObjects:_leftNode, _rightNode, nil]];
+    NSMutableArray *nodes = [NSMutableArray alloc];
+    
+    if (_leftNode != nil) { [nodes addObject: _leftNode]; }
+    if (_rightNode != nil) { [nodes addObject: _rightNode]; }
+    
+    [_skScene removeChildrenInArray:nodes];
 }
 
 #pragma mark - NYTSKVideoNodeDelegate
