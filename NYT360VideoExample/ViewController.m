@@ -88,7 +88,7 @@
     NSString* rightUrl = @"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/pP/zJQAQmoGi7D1hQVI9khQ.jpg";
     
     [self.nyt360VC addNode:leftUrl degree:90];
-    [self.nyt360VC addNode:rightUrl degree:-90];
+    [self.nyt360VC addNode:rightUrl degree:270];
 }
 
 - (IBAction)play:(id)sender {

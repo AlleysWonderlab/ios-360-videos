@@ -368,7 +368,7 @@
     UIImage* thumbnail = [UIImage imageWithData:imageData];
 
     
-    if (degree > 0) {
+    if (degree > 0 && degree < 180) {
         _rightNode = ({
             SKSpriteNode *node = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImage:thumbnail]];
             node.size = CGSizeMake(nodeWidth, nodeHeight);

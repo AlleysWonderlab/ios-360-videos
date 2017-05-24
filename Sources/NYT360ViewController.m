@@ -126,7 +126,7 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     } else if (M_PI - 2 * threshold < compass && compass < M_PI - threshold) {
         node = 90;
     } else if (M_PI + threshold < compass && compass < M_PI + 2 * threshold) {
-        node = -90;
+        node = 270;
     } else {
         node = -360; // There is not focused node.
     }
