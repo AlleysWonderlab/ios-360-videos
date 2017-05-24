@@ -106,7 +106,7 @@
     NSLog(@"userInitallyMovedCameraViaMethod");
 }
 
-- (void)nyt360ViewController:(NYT360ViewController *)viewController focusedNode:(int)degree {
+- (void)focusChanged:(int)degree {
     NSLog(@"focusedNode %d", degree);
 }
 

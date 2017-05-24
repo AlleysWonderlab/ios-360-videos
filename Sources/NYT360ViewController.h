@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Called when camera angle focus on node.
  */
-- (void)nyt360ViewController:(NYT360ViewController *)viewController focusedNode:(int)degree;
+- (void)focusChanged:(int)degree;
 
 @end
 

@@ -79,7 +79,7 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
             [strongSelf.delegate nyt360ViewController:strongSelf didUpdateCompassAngle:strongSelf.compassAngle];
             
             if (strongSelf.focusUpdated) {
-                [strongSelf.delegate nyt360ViewController:strongSelf focusedNode:strongSelf.focusedNode];
+                [strongSelf.delegate focusChanged:strongSelf.focusedNode];
             }
         };
 
