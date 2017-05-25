@@ -26,8 +26,8 @@
 
     // Create an AVPlayer for a 360º video:
     //NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://dwknz3zfy9iu1.cloudfront.net/uscenes_h-264_hd_test.mp4"]; // 1080
-    NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"]; // 720
-    //NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-ivv.mp4"];
+    //NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"]; // 720
+    NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-ivv.mp4"];
     //NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-navi.mp4"];
     self.player = [[AVPlayer alloc] initWithURL:videoURL];
     
@@ -61,15 +61,23 @@
                action:@selector(addRightNode:)
      forControlEvents:UIControlEventTouchUpInside];
     [button setTitle:@"Add Node" forState:UIControlStateNormal];
-    button.frame = CGRectMake(80.0, 210.0, 160.0, 40.0);
+    button.frame = CGRectMake(80.0, 100.0, 160.0, 40.0);
     [self.view addSubview:button];
+    
+    UIButton *branchButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [branchButton addTarget:self
+               action:@selector(branch:)
+     forControlEvents:UIControlEventTouchUpInside];
+    [branchButton setTitle:@"Branch" forState:UIControlStateNormal];
+    branchButton.frame = CGRectMake(80.0, 150.0, 160.0, 40.0);
+    [self.view addSubview:branchButton];
     
     UIButton *playButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [playButton addTarget:self
-               action:@selector(play:)
-     forControlEvents:UIControlEventTouchUpInside];
+                   action:@selector(play:)
+         forControlEvents:UIControlEventTouchUpInside];
     [playButton setTitle:@"Play" forState:UIControlStateNormal];
-    playButton.frame = CGRectMake(280.0, 60.0, 160.0, 40.0);
+    playButton.frame = CGRectMake(80.0, 200.0, 160.0, 40.0);
     [self.view addSubview:playButton];
 }
 
@@ -91,9 +99,19 @@
     [self.nyt360VC addNode:rightUrl degree:270];
 }
 
-- (IBAction)play:(id)sender {
-    [self.nyt360VC selectBranch:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-ivv.mp4"];
+- (IBAction)branch:(id)sender {
+    [self.nyt360VC selectBranch:@"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"];
+    [_player seekToTime:CMTimeMake(10.0, 1.0)];
+    [self.nyt360VC play];
+    NSLog(@"%@", [_player reasonForWaitingToPlay]);
+    //[_player play];
+    //[self.nyt360VC play];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.player.currentItem];
+}
+
+- (IBAction)play:(id)sender {
+    [self.nyt360VC play];
 }
 
 

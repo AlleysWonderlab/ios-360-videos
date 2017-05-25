@@ -87,7 +87,15 @@ NS_ASSUME_NONNULL_BEGIN
  *  Add Branch node
  */
 - (void)addNode:(NSString*)urlString degree:(int)degree;
+
+/**
+ *  When user want to switch branch, it called.
+ */
 - (void)selectBranch:(NSString*)videoUrl;
+
+/**
+ *  When user want to play current video, it called
+ */
 - (void)offBranchMode;
 
 #pragma mark - Camera Movement

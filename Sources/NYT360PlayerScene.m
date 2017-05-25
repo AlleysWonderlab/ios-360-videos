@@ -10,10 +10,7 @@
 @import AVFoundation;
 
 #import "NYT360PlayerScene.h"
-
-#define WIDTH 1280
-#define HEIGHT 720
-#define RADIUS 100.0
+#import "BranchDegree.h"
 
 
 @class NYTSKVideoNode;
@@ -66,10 +63,10 @@
 @interface NYT360PlayerScene () <NYTSKVideoNodeDelegate>
 
 @property (nonatomic, assign) BOOL videoPlaybackIsPaused;
+@property (nonatomic, readonly) SCNNode *screenNode;
 @property (nonatomic, readonly) SKScene *skScene;
 @property (nonatomic, readonly) SCNNode *cameraNode;
 @property (nonatomic, readonly) NYTSKVideoNode *videoNode;
-@property (nonatomic, readonly) SKNode *videoThumbnailNode;
 @property (nonatomic, readonly) SKNode *leftNode;
 @property (nonatomic, readonly) SKNode *rightNode;
 @property (nonatomic, readonly) AVPlayer *player;
@@ -80,18 +77,6 @@
 
 - (instancetype)initWithAVPlayer:(AVPlayer *)player boundToView:(SCNView *)view {
     if ((self = [super init])) {
-        
-        int tubeHeight = (2 * M_PI * RADIUS / 5.0) * (9.0 / 16.0);
-        
-        int sceneWidth = 3 * WIDTH;
-        int sceneHeight = HEIGHT;
-        
-        int nodeWidth = sceneWidth / 5;
-        int nodeHeight = sceneHeight;
-        
-        int nodeCenterX = sceneWidth / 2;
-        int nodeCenterY = sceneHeight / 2;
-        
         
         NSLog(@"%i", tubeHeight);
         
@@ -112,7 +97,7 @@
         [self.rootNode addChildNode:_cameraNode];
         
         _skScene = ({
-            SKScene *scene = [[SKScene alloc] initWithSize:CGSizeMake(sceneWidth, sceneHeight)];
+            SKScene *scene = [[SKScene alloc] initWithSize:CGSizeMake(SCENE_WIDTH, SCENE_HEIGHT)];
             scene.shouldRasterize = YES;
             scene.scaleMode = SKSceneScaleModeAspectFit;
             
@@ -128,37 +113,10 @@
             });
             [scene addChild:_videoNode];
             
-            /*
-            _leftNode = ({
-                SKSpriteNode *node = [SKSpriteNode spriteNodeWithColor:UIColor.greenColor size:CGSizeMake(nodeWidth, nodeHeight)];
-                node.position = CGPointMake(nodeCenterX - nodeWidth, nodeCenterY);
-                //node.eulerAngles = SCNVector3Make(0.0, 1.3, 0.0);
-                node;
-            });
-            [scene addChild:_leftNode];
-             */
-            
-            
-            /*
-            _rightNode = ({
-                //SKSpriteNode *node = [SKSpriteNode spriteNodeWithColor:UIColor.redColor size:CGSizeMake(nodeWidth, nodeHeight)];
-                //node.position = CGPointMake(nodeCenterX + nodeWidth, nodeCenterY);
-                //node;
-                
-                NYTSKVideoNode *node = [[NYTSKVideoNode alloc] initWithAVPlayer:secondPlayer];
-                node.size = CGSizeMake(nodeWidth, nodeHeight); // 28mm == 75 degree ~= 360/5 degree
-                node.position = CGPointMake(nodeCenterX + nodeWidth, nodeCenterY);
-                node.yScale = -1;
-                node.xScale = 1;
-                node;
-            });
-            [scene addChild:_rightNode];
-            */
-            
             scene;
         });
         
-        SCNNode *videoScreenNode = ({
+        _screenNode = ({
             SCNNode *node = [SCNNode new];
             node.position = SCNVector3Make(0, 0, 0);
             node.geometry = [SCNTube tubeWithInnerRadius:RADIUS outerRadius:(RADIUS + 0.1) height:tubeHeight];
@@ -173,89 +131,8 @@
             
             node;
         });
-        [self.rootNode addChildNode:videoScreenNode];
+        [self.rootNode addChildNode:_screenNode];
         
-        
-        
-        /*
-        SKScene *leftSkScene = ({
-            SKScene *scene = [[SKScene alloc] initWithSize:CGSizeMake(3 * width, height)];
-            scene.shouldRasterize = YES;
-            scene.scaleMode = SKSceneScaleModeAspectFit;
-            _leftNode = ({
-                SKSpriteNode *node = [SKSpriteNode spriteNodeWithColor:UIColor.greenColor size:CGSizeMake(scene.size.width / 5, scene.size.height)];
-                node.position = CGPointMake(scene.size.width / 2, scene.size.height / 2);
-                node;
-            });
-            [scene addChild:_leftNode];
-            scene;
-        });
-        
-        SCNNode *leftVideoNode = ({
-            SCNNode *node = [SCNNode new];
-            node.position = SCNVector3Make(0, 0, 0);
-            node.eulerAngles = SCNVector3Make(0.0, 1.3, 0.0);
-            //node.rotation = SCNVector4Make(1, 0, 0, 0);
-            node.geometry = [SCNTube tubeWithInnerRadius:tubeRadius-1.0 outerRadius:(tubeRadius - 0.9) height:tubeHeight];
-            //sphereNode.geometry = [SCNTube tubeWithInnerRadius:tubeRadius outerRadius:(tubeRadius + 0.1) height:74.25 / 2];
-            //node.geometry = [SCNSphere sphereWithRadius:100.0]; //TODO [DZ]: What is the correct size here?
-            node.geometry.firstMaterial.diffuse.contents = leftSkScene;
-            node.geometry.firstMaterial.transparency = 0.5;
-            node.geometry.firstMaterial.diffuse.minificationFilter = SCNFilterModeLinear;
-            node.geometry.firstMaterial.diffuse.magnificationFilter = SCNFilterModeLinear;
-            node.geometry.firstMaterial.doubleSided = NO;
-            
-            //NSLog(@"GeoCount: %d", node.geometry.geometryElementCount);
-            
-            node;
-        });
-        [self.rootNode addChildNode:leftVideoNode];
-         */
-        
-        
-        /*
-        SCNNode *wireNode = ({
-            SCNSphere *sphere = [SCNSphere sphereWithRadius:tubeRadius + 1.5];
-            sphere.firstMaterial.diffuse.contents = UIColor.redColor;
-            sphere.firstMaterial.doubleSided = YES;
-            sphere.segmentCount = 12;
-            [sphere setGeodesic:YES];
-            
-            SCNNode *node = [SCNNode new];
-            node.position = SCNVector3Make(0, 0, 0);
-            node.geometry = sphere;
-            
-            //NSLog(@"GeoCount: %d", node.geometry.geometryElementCount);
-            
-            node;
-        });
-        [self.rootNode addChildNode:wireNode];
-         */
-        
-        /*
-        SCNNode *wireNode = ({
-            SCNCylinder *geo = [SCNCylinder cylinderWithRadius:tubeRadius + 1.0 height:20];
-            //geo.radialSegmentCount = 12;
-            NSArray *materials = [NSArray array];
-            materials = [materials arrayByAddingObject:UIColor.blueColor];
-            materials = [materials arrayByAddingObject:UIColor.redColor];
-            materials = [materials arrayByAddingObject:UIColor.greenColor];
-
-            geo.materials = materials;
-            //geo.firstMaterial.diffuse.contents = skScene;
-            //geo.firstMaterial.doubleSided = YES;
-            
-            SCNNode *node = [SCNNode new];
-            node.position = SCNVector3Make(0, 0, 0);
-            node.geometry = geo;
-            
-            NSLog(@"GeoCount: %d", geo.geometryElementCount);
-            
-            node;
-        });
-        [self.rootNode addChildNode:wireNode];
-         */
-
         
         view.scene = self;
         view.pointOfView = self.cameraNode;
@@ -274,79 +151,22 @@
     self.videoPlaybackIsPaused = NO;
     
     if ([self.class isIOS10OrLater]) {
-        // On iOS 10, AVPlayer playback on a video node seems to work most
-        // reliably by directly invoking `play` and `pause` on the player,
-        // rather than the alternatives: calling the `play` and `pause` methods
-        // or the `setPaused:` setter on the video node. Those alternatives
-        // either do not work at all in certain cases, or they lead to spurious
-        // rate changes on the AVPlayer, which fire KVO notifications that
-        // NYTVideoViewController is not designed to handle. In an ideal world,
-        // we could refactor NYTVideoViewController to handle such edge cases.
-        // In practice, it is preferable to use the following technique so that
-        // 360 AVPlayer behavior on iOS 10 is the same as on iOS 9, and the same
-        // as standard AVPlayer behavior on both operating systems.
         [self.player play];
-        // On iOS 10, you must also update the `paused` property of the video
-        // node to match the playback state of its AVPlayer if you have invoked
-        // play/pause directly on the AVPlayer, otherwise the video node's
-        // internal state and the AVPlayer's timeControlStatus can get out of
-        // sync. One symptom of this problem is where the video can look like
-        // it's paused even though the audio is still playing in the background.
-        // The steps to reproduce this particular bug are finicky but reliable.
         self.videoNode.paused = NO;
-    }
-    else {
-        // Prior to iOS 10, SceneKit prefers to use `setPaused:` alone to toggle
-        // playback on a video node. Mimic this usage here to ensure consistency
-        // and avoid putting the player into an out-of-sync state.
+    } else {
         self.videoNode.paused = NO;
     }
     
 }
 
 - (void)pause {
-    
     // See note in NYTSKVideoNode above.
     self.videoPlaybackIsPaused = YES;
     
     if ([self.class isIOS10OrLater]) {
-        // On iOS 10, AVPlayer playback on a video node seems to work most
-        // reliably by directly invoking `play` and `pause` on the player,
-        // rather than the alternatives: calling the `play` and `pause` methods
-        // or the `setPaused:` setter on the video node. Those alternatives
-        // either do not work at all in certain cases, or they lead to spurious
-        // rate changes on the AVPlayer, which fire KVO notifications that
-        // NYTVideoViewController is not designed to handle. In an ideal world,
-        // we could refactor NYTVideoViewController to handle such edge cases.
-        // In practice, it is preferable to use the following technique so that
-        // 360 AVPlayer behavior on iOS 10 is the same as on iOS 9, and the same
-        // as standard AVPlayer behavior on both operating systems.
         [self.player pause];
-        // On iOS 10, you must also update the `paused` property of the video
-        // node to match the playback state of its AVPlayer if you have invoked
-        // play/pause directly on the AVPlayer, otherwise the video node's
-        // internal state and the AVPlayer's timeControlStatus can get out of
-        // sync. One symptom of this problem is where the video can look like
-        // it's paused even though the audio is still playing in the background.
-        // The steps to reproduce this particular bug are finicky but reliable.
         self.videoNode.paused = YES;
-    }
-    else {
-        // Prior to iOS 10, SceneKit prefers to use `setPaused:` alone to toggle
-        // playback on a video node. Mimic this usage here to ensure consistency
-        // and avoid putting the player into an out-of-sync state. There is one
-        // caveat, however: when the host application is pausing playback as the
-        // app is entering the background (and if background audio is enabled in
-        // the host application), then if you do not also call `pause` directly
-        // on the AVPlayer, then the player's audio will continue playing in the
-        // background. Even though this bug workaround means that our `pause`
-        // implementation is identical between iOS 8/9 and iOS 10, it's worth
-        // keeping the above check for the OS version since the edge cases
-        // before and after iOS 10 are different enough that it's worth keeping
-        // the implementations separated, if only for clarity that can be added
-        // via OS specific documentation (and also the fact that iOS 10's
-        // behavior may change between the current beta and a future production
-        // release).
+    } else {
         [self.player pause];
         self.videoNode.paused = YES;
     }
@@ -355,16 +175,7 @@
 
 - (void)addNode:(NSString*)urlString degree:(int)degree {
     [self pause];
-    
-    int sceneWidth = 3 * WIDTH;
-    int sceneHeight = HEIGHT;
-    
-    int nodeWidth = sceneWidth / 5;
-    int nodeHeight = sceneHeight;
-    
-    int nodeCenterX = sceneWidth / 2;
-    int nodeCenterY = sceneHeight / 2;
-    
+
     NSData* imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]];
     UIImage* thumbnail = [UIImage imageWithData:imageData];
 
@@ -392,23 +203,27 @@
     }
 }
 
-- (void)replaceVideo:(NSString*)videoUrl {
+- (void)replaceVideo:(NSString*)videoUrl degree:(int)degree {
+    NSMutableArray *nodes = [[NSMutableArray alloc] init];
+    
+    if (degree > 0 && degree < 180) {
+        if (_leftNode != nil) { [nodes addObject: _leftNode]; }
+        if (_rightNode != nil) { _rightNode.position = CGPointMake(nodeCenterX, nodeCenterY); }
+    } else if (degree > 180 && degree < 360) {
+        if (_leftNode != nil) { _leftNode.position = CGPointMake(nodeCenterX, nodeCenterY); }
+        if (_rightNode != nil) { [nodes addObject: _rightNode]; }
+    }
+    if (_videoNode != nil) { [nodes addObject: _videoNode]; }
+    
+    NSLog(@"%d", nodes.count);
+    [_skScene removeChildrenInArray:nodes];
+    
+    //[_skScene removeAllChildren];
+    
+
     NSURL * const url = [[NSURL alloc] initWithString:videoUrl];
     AVPlayerItem *item = [AVPlayerItem playerItemWithURL:url];
     [_player replaceCurrentItemWithPlayerItem:item];
-    
-    
-    [_skScene removeAllChildren];
-    
-    
-    int sceneWidth = 3 * WIDTH;
-    int sceneHeight = HEIGHT;
-    
-    int nodeWidth = sceneWidth / 5;
-    int nodeHeight = sceneHeight;
-    
-    int nodeCenterX = sceneWidth / 2;
-    int nodeCenterY = sceneHeight / 2;
     
     _videoNode = ({
         NYTSKVideoNode *videoNode = [[NYTSKVideoNode alloc] initWithAVPlayer:_player];
@@ -420,6 +235,7 @@
         videoNode;
     });
     [_skScene addChild:_videoNode];
+    NSLog(@"replaceVideo end");
 }
 
 - (void)removeBranchNodes {
@@ -429,6 +245,8 @@
     if (_rightNode != nil) { [nodes addObject: _rightNode]; }
     
     [_skScene removeChildrenInArray:nodes];
+    
+    _rightNode.position = CGPointMake(nodeCenterX, nodeCenterY);
 }
 
 #pragma mark - NYTSKVideoNodeDelegate

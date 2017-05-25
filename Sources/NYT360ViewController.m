@@ -90,6 +90,7 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 #pragma mark - Playback
 
 - (void)play {
+    NSLog(@"Play");
     [self.playerScene play];
 }
 
@@ -103,10 +104,13 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 }
 
 - (void)selectBranch:(NSString*)videoUrl {
-    if ([videoUrl length] > 0) {
-        [self.playerScene replaceVideo:videoUrl];
+    if (_focusedNode <= 0) {
+        [self offBranchMode];
+        return;
     }
-    [self offBranchMode];
+    
+    [self.playerScene replaceVideo:videoUrl degree:_focusedNode];
+    [self.cameraController setBranchMode:false];
 }
 
 - (void)offBranchMode {
@@ -138,6 +142,7 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     }
     
     if (node != self.focusedNode) {
+        NSLog(@"focusedNode: %d", node);
         self.focusedNode = node;
         return true;
     } else {
