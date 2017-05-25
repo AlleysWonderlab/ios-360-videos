@@ -9,6 +9,7 @@
 #import "NYT360CameraController.h"
 #import "NYT360EulerAngleCalculations.h"
 #import "NYT360CameraPanGestureRecognizer.h"
+#import "BranchDegree.h"
 
 static inline CGFloat distance(CGPoint a, CGPoint b) {
     return sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2));
@@ -136,8 +137,7 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
         float xFov = 360.0 / 5.0;
         self.pointOfView.camera.yFov = xFov * screenRatio;
     } else {
-        //self.pointOfView.camera.yFov = 42.1875 / 1.1; // Calculated by xfov(360/5 degree) and 16/9 ratio
-        self.pointOfView.camera.yFov = 42.1875 / 0.5; // Calculated by xfov(360/5 degree) and 16/9 ratio
+        self.pointOfView.camera.yFov = self.isBranchMode ? BRANCH_MODE_Y_FOV : NORMAL_Y_FOV;
     }
     
     NSLog(@"x: %f, y: %f", self.pointOfView.camera.xFov, self.pointOfView.camera.yFov);

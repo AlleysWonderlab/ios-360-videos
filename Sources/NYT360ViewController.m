@@ -142,7 +142,6 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     }
     
     if (node != self.focusedNode) {
-        NSLog(@"focusedNode: %d", node);
         self.focusedNode = node;
         return true;
     } else {

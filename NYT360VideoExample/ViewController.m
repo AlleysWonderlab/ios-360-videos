@@ -101,11 +101,6 @@
 
 - (IBAction)branch:(id)sender {
     [self.nyt360VC selectBranch:@"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"];
-    [_player seekToTime:CMTimeMake(10.0, 1.0)];
-    [self.nyt360VC play];
-    NSLog(@"%@", [_player reasonForWaitingToPlay]);
-    //[_player play];
-    //[self.nyt360VC play];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.player.currentItem];
 }
