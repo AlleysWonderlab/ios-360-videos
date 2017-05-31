@@ -101,6 +101,7 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 - (void)addNode:(NSString*)urlString degree:(int)degree {
     [self.playerScene addNode:urlString degree:degree];
     [self.cameraController setBranchMode:true];
+    [self updateCameraFOV];
 }
 
 - (void)selectBranch:(NSString*)videoUrl {
@@ -111,6 +112,7 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     
     [self.playerScene replaceVideo:videoUrl degree:_focusedNode];
     [self.cameraController setBranchMode:false];
+    [self updateCameraFOV];
 }
 
 - (void)offBranchMode {
