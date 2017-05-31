@@ -26,8 +26,8 @@
 
     // Create an AVPlayer for a 360º video:
     //NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://dwknz3zfy9iu1.cloudfront.net/uscenes_h-264_hd_test.mp4"]; // 1080
-    //NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"]; // 720
-    NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-ivv.mp4"];
+    NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"]; // 720
+    //NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-ivv.mp4"];
     //NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-navi.mp4"];
     self.player = [[AVPlayer alloc] initWithURL:videoURL];
     
@@ -95,12 +95,12 @@
     NSString* leftUrl = @"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/wR/TrthhhIEd02eQjV_GX4g-s.jpg";
     NSString* rightUrl = @"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/pP/zJQAQmoGi7D1hQVI9khQ.jpg";
     
-    [self.nyt360VC addNode:leftUrl degree:90];
-    [self.nyt360VC addNode:rightUrl degree:270];
+    [self.nyt360VC addNode:leftUrl degree:270];
+    [self.nyt360VC addNode:rightUrl degree:90];
 }
 
 - (IBAction)branch:(id)sender {
-    [self.nyt360VC selectBranch:@"https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"];
+    [self.nyt360VC selectBranch:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/pP/zJQAQmoGi7D1hQVI9khQ-ivv.mp4"];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.player.currentItem];
 }

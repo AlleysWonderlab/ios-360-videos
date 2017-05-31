@@ -10,6 +10,7 @@
 @import AVFoundation;
 
 #import "NYT360PlayerScene.h"
+#import "Branch.h"
 #import "BranchDegree.h"
 
 
@@ -67,9 +68,10 @@
 @property (nonatomic, readonly) SKScene *skScene;
 @property (nonatomic, readonly) SCNNode *cameraNode;
 @property (nonatomic, readonly) NYTSKVideoNode *videoNode;
-@property (nonatomic, readonly) SKNode *leftNode;
-@property (nonatomic, readonly) SKNode *rightNode;
 @property (nonatomic, readonly) AVPlayer *player;
+@property (nonatomic, strong) NSMutableArray *branches;
+
+- (Branch *)getBranch:(int)degree;
 
 @end
 
@@ -83,6 +85,7 @@
         _videoPlaybackIsPaused = YES;
         
         _player = player;
+        _branches = [[NSMutableArray alloc] init];
         
         _camera = [SCNCamera new];
         //_camera.wantsHDR = YES;
@@ -178,47 +181,44 @@
 
     NSData* imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]];
     UIImage* thumbnail = [UIImage imageWithData:imageData];
-
-    
-    if (degree > 0 && degree < 180) {
-        _rightNode = ({
-            SKSpriteNode *node = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImage:thumbnail]];
-            node.size = CGSizeMake(nodeWidth, nodeHeight);
-            node.position = CGPointMake(nodeCenterX + nodeWidth, nodeCenterY);
-            node.yScale = -1;
-            node.xScale = 1;
-            node;
-        });
-        [_skScene addChild:_rightNode];
+    int nodeX = 0;
+    if (degree < 180) {
+        nodeX = nodeWidth * (degree / 90.0);
     } else {
-        _leftNode = ({
-            SKSpriteNode *node = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImage:thumbnail]];
-            node.size = CGSizeMake(nodeWidth, nodeHeight);
-            node.position = CGPointMake(nodeCenterX - nodeWidth, nodeCenterY);
-            node.yScale = -1;
-            node.xScale = 1;
-            node;
-        });
-        [_skScene addChild:_leftNode];
+        nodeX = nodeWidth * ((180 - degree) / 90.0);
     }
+    
+    
+    SKNode *branchNode = ({
+        SKSpriteNode *node = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImage:thumbnail]];
+        node.size = CGSizeMake(nodeWidth, nodeHeight);
+        node.position = CGPointMake(nodeCenterX + nodeX, nodeCenterY);
+        node.yScale = -1;
+        node.xScale = 1;
+        node;
+    });
+    [_skScene addChild:branchNode];
+    
+    Branch *branch = [[Branch alloc] initWithSKNode:branchNode thumbnail:urlString degree:degree];
+    [self.branches addObject:branch];
 }
 
 - (void)replaceVideo:(NSString*)videoUrl degree:(int)degree {
-    NSMutableArray *nodes = [[NSMutableArray alloc] init];
+    Branch *branch = [self getBranch:degree];
+    branch.node.position = CGPointMake(nodeCenterX, nodeCenterY);
     
-    if (degree > 0 && degree < 180) {
-        if (_leftNode != nil) { [nodes addObject: _leftNode]; }
-        if (_rightNode != nil) { _rightNode.position = CGPointMake(nodeCenterX, nodeCenterY); }
-    } else if (degree > 180 && degree < 360) {
-        if (_leftNode != nil) { _leftNode.position = CGPointMake(nodeCenterX, nodeCenterY); }
-        if (_rightNode != nil) { [nodes addObject: _rightNode]; }
+
+    NSMutableArray *removeNodes = [[NSMutableArray alloc] init];
+    if (_videoNode != nil) { [removeNodes addObject: _videoNode]; }
+    for (Branch* branch in self.branches) {
+        if (branch.degree == degree) {
+            continue;
+        }
+        [removeNodes addObject: branch.node];
     }
-    if (_videoNode != nil) { [nodes addObject: _videoNode]; }
-    
-    NSLog(@"%d", nodes.count);
-    [_skScene removeChildrenInArray:nodes];
-    
-    //[_skScene removeAllChildren];
+
+    [_skScene removeChildrenInArray:removeNodes];
+    [self.branches removeAllObjects];
     
 
     NSURL * const url = [[NSURL alloc] initWithString:videoUrl];
@@ -239,15 +239,20 @@
 }
 
 - (void)removeBranchNodes {
-    NSMutableArray *nodes = [[NSMutableArray alloc] init];
-    
-    if (_leftNode != nil) { [nodes addObject: _leftNode]; }
-    if (_rightNode != nil) { [nodes addObject: _rightNode]; }
-    
-    [_skScene removeChildrenInArray:nodes];
-    
-    _rightNode.position = CGPointMake(nodeCenterX, nodeCenterY);
+    [_skScene removeChildrenInArray:self.branches];
+    [self.branches removeAllObjects];
 }
+
+- (Branch *)getBranch:(int)degree {
+    for (Branch* branch in self.branches) {
+        if (branch.degree == degree) {
+            return branch;
+        }
+    }
+    
+    return nil;
+}
+
 
 #pragma mark - NYTSKVideoNodeDelegate
 
