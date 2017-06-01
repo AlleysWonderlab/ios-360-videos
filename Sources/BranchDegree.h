@@ -11,7 +11,7 @@
 
 
 #define NORMAL_Y_FOV 38.35 // (42.1875 / 1.1); // Calculated by xfov(360/5 degree) and 16/9 ratio
-#define BRANCH_MODE_Y_FOV 85
+#define BRANCH_MODE_Y_FOV 110 // 85
 
 
 #define WIDTH 1280
