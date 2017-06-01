@@ -137,7 +137,15 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
         float xFov = 360.0 / 5.0;
         self.pointOfView.camera.yFov = xFov * screenRatio;
     } else {
-        self.pointOfView.camera.yFov = self.isBranchMode ? BRANCH_MODE_Y_FOV : NORMAL_Y_FOV;
+        if (self.isBranchMode) {
+            if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
+                self.pointOfView.camera.yFov = BRANCH_PORTRAIT_Y_FOV;
+            } else {
+                self.pointOfView.camera.yFov = BRANCH_LANDSCAPE_Y_FOV;
+            }
+        } else {
+            self.pointOfView.camera.yFov = NORMAL_Y_FOV;
+        }
     }
     
     NSLog(@"x: %f, y: %f", self.pointOfView.camera.xFov, self.pointOfView.camera.yFov);
