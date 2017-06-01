@@ -10,9 +10,15 @@
 #define BranchDegree_h
 
 
-#define NORMAL_Y_FOV 38.35 // (42.1875 / 1.1); // Calculated by xfov(360/5 degree) and 16/9 ratio
-#define BRANCH_PORTRAIT_Y_FOV 110 // 85
-#define BRANCH_LANDSCAPE_Y_FOV 50
+#define NORMAL_Y_FOV 47 // (52.7343 / 1.1); // Calculated by xfov(360/4 degree) and 16/9 ratio
+#define BRANCH_PORTRAIT_Y_FOV 125 // 85
+#define BRANCH_LANDSCAPE_Y_FOV 65
+#define NODE_WIDTH_DIVIDOR 4.0
+
+//#define NORMAL_Y_FOV 38.35 // (42.1875 / 1.1); // Calculated by xfov(360/5 degree) and 16/9 ratio
+//#define BRANCH_PORTRAIT_Y_FOV 110 // 85
+//#define BRANCH_LANDSCAPE_Y_FOV 50
+//#define NODE_WIDTH_DIVIDOR 5.0
 
 
 #define WIDTH 1280
@@ -21,9 +27,9 @@
 
 #define SCENE_WIDTH (3 * WIDTH)
 #define SCENE_HEIGHT (HEIGHT)
-#define NODE_WIDTH_DIVIDOR 5
 
-static int tubeHeight = (2 * M_PI * RADIUS / 5.0) * (9.0 / 16.0);
+
+static int tubeHeight = (2 * M_PI * RADIUS / NODE_WIDTH_DIVIDOR) * (9.0 / 16.0);
 
 static int nodeWidth = SCENE_WIDTH / NODE_WIDTH_DIVIDOR;
 static int nodeHeight = HEIGHT;
