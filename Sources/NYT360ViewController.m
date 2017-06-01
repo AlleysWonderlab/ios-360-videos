@@ -51,6 +51,7 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 @property (nonatomic, readonly) SCNView *sceneView;
 @property (nonatomic, readonly) NYT360PlayerScene *playerScene;
 @property (nonatomic, readonly) NYT360CameraController *cameraController;
+@property (nonatomic, strong) NSMutableSet *degreeSet;
 
 @end
 
@@ -68,6 +69,8 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
         _playerScene = [[NYT360PlayerScene alloc] initWithAVPlayer:player boundToView:_sceneView];
         _cameraController = [[NYT360CameraController alloc] initWithView:_sceneView motionManager:motionManager];
         _cameraController.delegate = self;
+        
+        _degreeSet = [[NSMutableSet alloc] init];
 
         typeof(self) __weak weakSelf = self;
         _cameraController.compassAngleUpdateBlock = ^(float compassAngle) {
@@ -102,6 +105,9 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     [self.playerScene addNode:urlString degree:degree];
     [self.cameraController setBranchMode:true];
     [self updateCameraFOV];
+    
+    [self.degreeSet addObject:[NSNumber numberWithInt:degree]];
+    NSLog(@"Set size: %d", self.degreeSet.count);
 }
 
 - (void)selectBranch:(NSString*)videoUrl {
@@ -113,11 +119,13 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     [self.playerScene replaceVideo:videoUrl degree:_focusedNode];
     [self.cameraController setBranchMode:false];
     [self updateCameraFOV];
+    [self.degreeSet removeAllObjects];
 }
 
 - (void)offBranchMode {
     [self.playerScene removeBranchNodes];
     [self.cameraController setBranchMode:false];
+    [self.degreeSet removeAllObjects];
 }
 
 
@@ -129,19 +137,26 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 
 - (BOOL)focusUpdated {
     float compass = fabsf(self.cameraController.compassAngle);
-    float threshold = (2.0 * M_PI) / 5.0;
+    float cameraDegree = compass * 180.0 / M_PI; // Couterwise clock
+    float degree = (180 - cameraDegree) >= 0 ? 180 - cameraDegree : 540 - cameraDegree; // Closewise degree
     
-    int node = 0;
+    float threshold = 360.0 / (2 * 5.0);
     
-    if (M_PI - threshold < compass && compass < M_PI + threshold) {
+    
+    int node = -360; // Default
+    if (fabsf(degree) < threshold || fabsf(360 - degree) < threshold) {
         node = 0;
-    } else if (M_PI - 2 * threshold < compass && compass < M_PI - threshold) {
-        node = 90;
-    } else if (M_PI + threshold < compass && compass < M_PI + 2 * threshold) {
-        node = 270;
-    } else {
-        node = -360; // There is not focused node.
     }
+    
+    for (NSNumber *number in self.degreeSet) {
+        if (fabsf(number.intValue - degree) < threshold) {
+            node = number.intValue;
+            break;
+        }
+    }
+
+    //NSLog(@"%f, %f, %d", cameraDegree, degree, node);
+    //NSLog(@"%f, %d, %f", degree, node, threshold);
     
     if (node != self.focusedNode) {
         self.focusedNode = node;
