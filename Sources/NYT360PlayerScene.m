@@ -239,7 +239,12 @@
 }
 
 - (void)removeBranchNodes {
-    [_skScene removeChildrenInArray:self.branches];
+    NSMutableArray *removeNodes = [[NSMutableArray alloc] init];
+    for (Branch* branch in self.branches) {
+        [removeNodes addObject: branch.node];
+    }
+    
+    [_skScene removeChildrenInArray:removeNodes];
     [self.branches removeAllObjects];
 }
 

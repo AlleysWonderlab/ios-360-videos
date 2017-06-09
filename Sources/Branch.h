@@ -9,14 +9,10 @@
 @import SpriteKit;
 
 @interface Branch:NSObject
-{
-    SKNode *node;
-    NSString *thumbnail;
-    int degree;
-}
-@property(nonatomic, readwrite) SKNode *node;
-@property(nonatomic, readwrite) NSString *thumbnail;
-@property(nonatomic, readwrite) int degree;
+
+@property(nonatomic, assign) SKNode *node;
+@property(nonatomic, assign) NSString *thumbnail;
+@property(nonatomic, assign) int degree;
 
 - (id)initWithSKNode:(SKNode *)aNode
                thumbnail:(NSString *)aThumbnail
