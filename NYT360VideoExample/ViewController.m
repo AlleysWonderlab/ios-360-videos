@@ -92,16 +92,13 @@
 }
 
 - (IBAction)addRightNode:(id)sender {
-    NSString* leftUrl = @"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/wR/TrthhhIEd02eQjV_GX4g-s.jpg";
-    NSString* rightUrl = @"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/pP/zJQAQmoGi7D1hQVI9khQ.jpg";
-    
-    [self.nyt360VC addNode:leftUrl degree:270];
-    [self.nyt360VC addNode:rightUrl degree:90];
+    [self.nyt360VC addNode:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/wR/TrthhhIEd02eQjV_GX4g-s.jpg" degree:270];
+    [self.nyt360VC addNode:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/pP/zJQAQmoGi7D1hQVI9khQ.jpg" degree:90];
 }
 
 - (IBAction)branch:(id)sender {
     [self.nyt360VC selectBranch:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/pP/zJQAQmoGi7D1hQVI9khQ-ivv.mp4"];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.player.currentItem];
 }
 
