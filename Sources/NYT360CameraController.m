@@ -125,6 +125,10 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
     }
 }
 
+- (double)getCameraFOV {
+    return self.pointOfView.camera.yFov;
+}
+
 - (void)updateCameraFOV:(CGSize)viewSize {
     //self.pointOfView.camera.yFov = NYT360OptimalYFovForViewSize(viewSize);
     
@@ -149,6 +153,15 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
     }
     
     NSLog(@"x: %f, y: %f", self.pointOfView.camera.xFov, self.pointOfView.camera.yFov);
+}
+
+- (void)setCameraFOV:(double)fov {
+    double MAX_FOV = BRANCH_LANDSCAPE_Y_FOV;
+    if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
+        MAX_FOV = BRANCH_PORTRAIT_Y_FOV;
+    }
+
+    self.pointOfView.camera.yFov = fov > MAX_FOV ? MAX_FOV : (fov < MIN_Y_FOV ? MIN_Y_FOV : fov);
 }
 
 - (void)setBranchMode:(BOOL)enable {

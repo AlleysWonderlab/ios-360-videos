@@ -136,7 +136,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)reorientVerticalCameraAngleToHorizon:(BOOL)animated;
 
+- (double)getCameraFOV;
+
 - (void)updateCameraFOV;
+
+- (void)setCameraFOV:(double)fov;
 
 @end
 

@@ -113,15 +113,13 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 - (void)selectBranch:(NSString*)videoUrl {
     if (_focusedNode > 0) {
         [self.playerScene replaceVideo:videoUrl degree:_focusedNode];
-        [self.cameraController setBranchMode:false];
-        [self updateCameraFOV];
-        [self.degreeSet removeAllObjects];
     } else {
         [self.playerScene removeBranchNodes];
-        [self.cameraController setBranchMode:false];
-        [self updateCameraFOV];
-        [self.degreeSet removeAllObjects];
     }
+    
+    [self.cameraController setBranchMode:false];
+    [self updateCameraFOV];
+    [self.degreeSet removeAllObjects];
 }
 
 
@@ -256,8 +254,16 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     }];
 }
 
+- (double)getCameraFOV {
+    return [self.cameraController getCameraFOV];
+}
+
 - (void)updateCameraFOV {
     [self.cameraController updateCameraFOV:self.view.bounds.size];
+}
+
+- (void)setCameraFOV:(double)fov {
+    [self.cameraController setCameraFOV:fov];
 }
 
 #pragma mark - SCNSceneRendererDelegate

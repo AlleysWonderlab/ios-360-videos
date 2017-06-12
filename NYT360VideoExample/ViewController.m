@@ -15,6 +15,7 @@
 
 @property (nonatomic) AVPlayer *player;
 @property (nonatomic) NYT360ViewController *nyt360VC;
+@property (nonatomic) double startFov;
 
 @end
 
@@ -104,6 +105,17 @@
 
 - (IBAction)play:(id)sender {
     [self.nyt360VC play];
+}
+
+
+- (IBAction)pinchZoom:(UIPinchGestureRecognizer *)recognizer {
+    if (recognizer.state == UIGestureRecognizerStateBegan) {
+        self.startFov = [self.nyt360VC getCameraFOV];
+        NSLog(@"PinchZoom Begin: %f", recognizer.scale);
+    }
+    
+    NSLog(@"PinchZoom: %f", recognizer.scale);
+    [self.nyt360VC setCameraFOV:self.startFov / recognizer.scale];
 }
 
 

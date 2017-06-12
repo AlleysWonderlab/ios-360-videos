@@ -97,6 +97,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)updateCameraFOV:(CGSize)viewSize;
 
+- (double)getCameraFOV;
+
+- (void)setCameraFOV:(double)fov;
+
 - (void)setBranchMode:(BOOL)enable;
 
 /**
