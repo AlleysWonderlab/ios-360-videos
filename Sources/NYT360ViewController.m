@@ -111,21 +111,17 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 }
 
 - (void)selectBranch:(NSString*)videoUrl {
-    if (_focusedNode <= 0) {
-        [self offBranchMode];
-        return;
+    if (_focusedNode > 0) {
+        [self.playerScene replaceVideo:videoUrl degree:_focusedNode];
+        [self.cameraController setBranchMode:false];
+        [self updateCameraFOV];
+        [self.degreeSet removeAllObjects];
+    } else {
+        [self.playerScene removeBranchNodes];
+        [self.cameraController setBranchMode:false];
+        [self updateCameraFOV];
+        [self.degreeSet removeAllObjects];
     }
-    
-    [self.playerScene replaceVideo:videoUrl degree:_focusedNode];
-    [self.cameraController setBranchMode:false];
-    [self updateCameraFOV];
-    [self.degreeSet removeAllObjects];
-}
-
-- (void)offBranchMode {
-    [self.playerScene removeBranchNodes];
-    [self.cameraController setBranchMode:false];
-    [self.degreeSet removeAllObjects];
 }
 
 

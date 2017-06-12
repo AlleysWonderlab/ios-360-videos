@@ -93,10 +93,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)selectBranch:(NSString*)videoUrl;
 
-/**
- *  When user want to play current video, it called
- */
-- (void)offBranchMode;
 
 #pragma mark - Camera Movement
 
