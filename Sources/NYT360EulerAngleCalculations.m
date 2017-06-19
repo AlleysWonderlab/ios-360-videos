@@ -63,7 +63,7 @@ NYT360EulerAngleCalculationResult NYT360UpdatedPositionAndAnglesForAllowedAxes(C
     return NYT360EulerAngleCalculationResultMake(position, eulerAngles);
 }
 
-NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position, CMRotationRate rotationRate, UIInterfaceOrientation orientation, NYT360PanningAxis allowedPanningAxes, CGFloat noiseThreshold, BOOL branchMode) {
+NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position, CMRotationRate rotationRate, UIInterfaceOrientation orientation, NYT360PanningAxis allowedPanningAxes, CGFloat noiseThreshold, double fov, BOOL branchMode) {
     
     static CGFloat NYT360EulerAngleCalculationRotationRateDampingFactor = 0.01;
     //static CGFloat NYT360EulerAngleCalculationRotationRateDampingFactor = 0.02;
@@ -112,27 +112,11 @@ NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position
     // operators.
     position = NYT360AdjustPositionForAllowedAxes(position, allowedPanningAxes);
     
-    //NSLog(@"posX: %f, posY: %f", position.x, position.y);
-    
     if (branchMode == false) {
         if (UIInterfaceOrientationIsLandscape(orientation)) {
             position.x = 3.14;
-            
-            /*
-             if (position.x > 3.20) {
-             position.x = 3.20;
-             } else if (position.x < 3.08) {
-             position.x = 3.08;
-             }
-             */
         } else {
-            /*
-             if (position.x > 3.57) {
-                 position.x = 3.57;
-             } else if (position.x < 2.71) {
-                 position.x = 2.71;
-             }
-             */
+            position = LimitPositionByFov(position, fov);
         }
     }
 
@@ -142,7 +126,7 @@ NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position
     return NYT360EulerAngleCalculationResultMake(position, eulerAngles);
 }
 
-NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint position, CGPoint rotateDelta, CGSize viewSize, NYT360PanningAxis allowedPanningAxes, double fov) {
+NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint position, CGPoint rotateDelta, CGSize viewSize, NYT360PanningAxis allowedPanningAxes, double fov, BOOL branchMode, UIInterfaceOrientation orientation) {
     
     // TODO: [jaredsinclair] Consider adding constants for the multipliers.
     
@@ -156,11 +140,19 @@ NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint posi
 
     
     position = NYT360AdjustPositionForAllowedAxes(position, allowedPanningAxes);
-    position = LimitPositionByFov(position, fov);
+    
+    if (branchMode == false) {
+        if (UIInterfaceOrientationIsLandscape(orientation)) {
+            position.x = 3.14;
+        } else {
+            position = LimitPositionByFov(position, fov);
+        }
+    }
+    
     
     SCNVector3 eulerAngles = SCNVector3Make(position.y, position.x, 0);
     
-    NSLog(@"posX: %f, posY: %f", position.x, position.y);
+    //NSLog(@"posX: %f, posY: %f", position.x, position.y);
     
     return NYT360EulerAngleCalculationResultMake(position, eulerAngles);
 }
@@ -191,7 +183,7 @@ float NYT360CompassAngleForEulerAngles(SCNVector3 eulerAngles, float referenceAn
 }
 
 CGPoint LimitPositionByFov(CGPoint position, double fov) {
-    NSLog(@"posX: %f, fov: %f", position.x, fov);
+    //NSLog(@"posX: %f, fov: %f", position.x, fov);
     
     // In portrait mode,
     // 120 is max fov with 0 margin,
@@ -208,9 +200,10 @@ CGPoint LimitPositionByFov(CGPoint position, double fov) {
     }
 
     
-    float margin = MARGIN_RANGE - MARGIN_RANGE * (fov - 35.0) / FOV_RANGE;
+    //float margin = MARGIN_RANGE - MARGIN_RANGE * (fov - 35.0) / FOV_RANGE;
+    float margin = MARGIN_RANGE * (1 - (fov - 35.0) / FOV_RANGE);
     
-    NSLog(@"margin: %f", margin);
+    //NSLog(@"margin: %f", margin);
     
     if (position.x >= POS_ORIGIN + margin) {
         position.x = POS_ORIGIN + margin;

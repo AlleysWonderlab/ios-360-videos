@@ -111,7 +111,7 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
 
     NYT360EulerAngleCalculationResult result;
-    result = NYT360DeviceMotionCalculation(self.currentPosition, rotationRate, orientation, self.allowedDeviceMotionPanningAxes, NYT360EulerAngleCalculationNoiseThresholdDefault, self.isBranchMode);
+    result = NYT360DeviceMotionCalculation(self.currentPosition, rotationRate, orientation, self.allowedDeviceMotionPanningAxes, NYT360EulerAngleCalculationNoiseThresholdDefault, self.pointOfView.camera.yFov, self.isBranchMode);
     self.currentPosition = result.position;
     self.pointOfView.eulerAngles = result.eulerAngles;
 
@@ -156,9 +156,21 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
 }
 
 - (void)setCameraFOV:(double)fov {
-    double MAX_FOV = BRANCH_LANDSCAPE_Y_FOV;
-    if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
-        MAX_FOV = BRANCH_PORTRAIT_Y_FOV;
+    double MAX_FOV = NORMAL_Y_FOV;
+    bool isPortrait = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
+    
+    if (isPortrait) {
+        if (self.isBranchMode) {
+            MAX_FOV = BRANCH_PORTRAIT_Y_FOV;
+        } else {
+            MAX_FOV = MAX_PORTRAIT_Y_FOV;
+        }
+    } else {
+        if (self.isBranchMode) {
+            MAX_FOV = BRANCH_LANDSCAPE_Y_FOV;
+        } else {
+            MAX_FOV = MAX_LANDSCAPE_Y_FOV;
+        }
     }
 
     self.pointOfView.camera.yFov = fov > MAX_FOV ? MAX_FOV : (fov < MIN_Y_FOV ? MIN_Y_FOV : fov);
@@ -230,9 +242,9 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
     // be jarring otherwise.
     if (self.isAnimatingReorientation) { return; }
     
-    
-    
     CGPoint point = [recognizer locationInView:self.view];
+    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    
     switch (recognizer.state) {
         case UIGestureRecognizerStateBegan:
             self.rotateStart = point;
@@ -241,15 +253,10 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
             self.rotateCurrent = point;
             self.rotateDelta = subtractPoints(self.rotateStart, self.rotateCurrent);
             self.rotateStart = self.rotateCurrent;
-            NYT360EulerAngleCalculationResult result = NYT360PanGestureChangeCalculation(self.currentPosition, self.rotateDelta, self.view.bounds.size, self.allowedPanGesturePanningAxes, self.pointOfView.camera.yFov);
+            NYT360EulerAngleCalculationResult result = NYT360PanGestureChangeCalculation(self.currentPosition, self.rotateDelta, self.view.bounds.size, self.allowedPanGesturePanningAxes, self.pointOfView.camera.yFov, self.isBranchMode, orientation);
             self.currentPosition = result.position;
             self.pointOfView.eulerAngles = result.eulerAngles;
-            
-            
-            
-            //NSLog(@"handlePan: %ld", (long)recognizer.state);
-            //NSLog(@"handlePan: %f, %f", result.position.x, result.position.y);
-            //NSLog(@"handlePan: %f, %f, %f", result.eulerAngles.x, result.eulerAngles.y, result.eulerAngles.z);
+
             if (self.compassAngleUpdateBlock) {
                 self.compassAngleUpdateBlock(self.compassAngle);
             }

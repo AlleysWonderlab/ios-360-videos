@@ -12,8 +12,12 @@
 
 #define NORMAL_Y_FOV 47 // (52.7343 / 1.1); // Calculated by xfov(360/4 degree) and 16/9 ratio
 #define MIN_Y_FOV 35
+#define MAX_PORTRAIT_Y_FOV 121
+#define MAX_LANDSCAPE_Y_FOV 58
+
 #define BRANCH_PORTRAIT_Y_FOV 125 // 85
 #define BRANCH_LANDSCAPE_Y_FOV 65
+
 #define NODE_WIDTH_DIVIDOR 4.0
 
 //#define NORMAL_Y_FOV 38.35 // (42.1875 / 1.1); // Calculated by xfov(360/5 degree) and 16/9 ratio
