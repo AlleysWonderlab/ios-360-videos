@@ -108,7 +108,7 @@
     CGPoint position = CGPointMake(100, 100);
     CGPoint delta = CGPointMake(1000, -1000);
     CGSize viewSize = CGSizeMake(536, 320);
-    NYT360EulerAngleCalculationResult result = NYT360PanGestureChangeCalculation(position, delta, viewSize, NYT360PanningAxisHorizontal);
+    NYT360EulerAngleCalculationResult result = NYT360PanGestureChangeCalculation(position, delta, viewSize, NYT360PanningAxisHorizontal, 40.0);
     XCTAssertNotEqual(result.position.x, 0);
     XCTAssertEqual(result.position.y, 0);
 }
@@ -117,7 +117,7 @@
     CGPoint position = CGPointMake(100, 100);
     CGPoint delta = CGPointMake(1000, -1000);
     CGSize viewSize = CGSizeMake(536, 320);
-    NYT360EulerAngleCalculationResult result = NYT360PanGestureChangeCalculation(position, delta, viewSize, NYT360PanningAxisVertical);
+    NYT360EulerAngleCalculationResult result = NYT360PanGestureChangeCalculation(position, delta, viewSize, NYT360PanningAxisVertical, 40.0);
     XCTAssertEqual(result.position.x, 0);
     XCTAssertNotEqual(result.position.y, 0);
 }

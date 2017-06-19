@@ -126,11 +126,13 @@ NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position
              }
              */
         } else {
+            /*
              if (position.x > 3.57) {
                  position.x = 3.57;
              } else if (position.x < 2.71) {
                  position.x = 2.71;
              }
+             */
         }
     }
 
@@ -140,7 +142,7 @@ NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position
     return NYT360EulerAngleCalculationResultMake(position, eulerAngles);
 }
 
-NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint position, CGPoint rotateDelta, CGSize viewSize, NYT360PanningAxis allowedPanningAxes) {
+NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint position, CGPoint rotateDelta, CGSize viewSize, NYT360PanningAxis allowedPanningAxes, double fov) {
     
     // TODO: [jaredsinclair] Consider adding constants for the multipliers.
     
@@ -151,12 +153,14 @@ NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint posi
     position = CGPointMake(position.x + 2 * M_PI * rotateDelta.x / viewSize.width * 0.5,
                            position.y + 2 * M_PI * rotateDelta.y / viewSize.height * 0.4);
     position.y = NYT360Clamp(position.y, -M_PI / 2, M_PI / 2);
+
     
     position = NYT360AdjustPositionForAllowedAxes(position, allowedPanningAxes);
+    position = LimitPositionByFov(position, fov);
     
     SCNVector3 eulerAngles = SCNVector3Make(position.y, position.x, 0);
     
-    //NSLog(@"posX: %f, posY: %f", position.x, position.y);
+    NSLog(@"posX: %f, posY: %f", position.x, position.y);
     
     return NYT360EulerAngleCalculationResultMake(position, eulerAngles);
 }
@@ -184,4 +188,35 @@ CGFloat NYT360OptimalYFovForViewSize(CGSize viewSize) {
 
 float NYT360CompassAngleForEulerAngles(SCNVector3 eulerAngles, float referenceAngle) {
     return NYT360UnitRotationForCameraRotation((-1.0 * eulerAngles.y) + referenceAngle);
+}
+
+CGPoint LimitPositionByFov(CGPoint position, double fov) {
+    NSLog(@"posX: %f, fov: %f", position.x, fov);
+    
+    // In portrait mode,
+    // 120 is max fov with 0 margin,
+    // and 35 is min fov with 0.61 fov margin.
+    
+    static float POS_ORIGIN = 3.14;
+    static float FOV_RANGE = 120.0 - 35.0;
+    static float MARGIN_RANGE = 0.61;
+    
+
+    if (fov >= 120) {
+        position.x = POS_ORIGIN;
+        return position;
+    }
+
+    
+    float margin = MARGIN_RANGE - MARGIN_RANGE * (fov - 35.0) / FOV_RANGE;
+    
+    NSLog(@"margin: %f", margin);
+    
+    if (position.x >= POS_ORIGIN + margin) {
+        position.x = POS_ORIGIN + margin;
+    } else if (position.x <= POS_ORIGIN - margin) {
+        position.x = POS_ORIGIN - margin;
+    }
+    
+    return position;
 }

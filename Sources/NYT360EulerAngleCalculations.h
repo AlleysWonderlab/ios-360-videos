@@ -29,7 +29,7 @@ NYT360EulerAngleCalculationResult NYT360UpdatedPositionAndAnglesForAllowedAxes(C
 
 NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position, CMRotationRate rotationRate, UIInterfaceOrientation orientation, NYT360PanningAxis allowedPanningAxes, CGFloat noiseThreshold, BOOL branchMode);
 
-NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint position, CGPoint rotateDelta, CGSize viewSize, NYT360PanningAxis allowedPanningAxes);
+NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint position, CGPoint rotateDelta, CGSize viewSize, NYT360PanningAxis allowedPanningAxes, double fov);
 
 CGFloat NYT360OptimalYFovForViewSize(CGSize viewSize);
 
@@ -49,3 +49,5 @@ CGFloat NYT360OptimalYFovForViewSize(CGSize viewSize);
  *  Input values in excess of one rotation will be mapped to an equivalent value within the range of plus or minus one radian, such that output values will exceed one rotation. Input values equal (or very very close to equal) to a multiple of one radian (positive or negative) will be mapped to 0.
  */
 float NYT360CompassAngleForEulerAngles(SCNVector3 eulerAngles, float referenceAngle);
+
+CGPoint LimitPositionByFov(CGPoint position, double fov);

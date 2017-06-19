@@ -111,10 +111,10 @@
 - (IBAction)pinchZoom:(UIPinchGestureRecognizer *)recognizer {
     if (recognizer.state == UIGestureRecognizerStateBegan) {
         self.startFov = [self.nyt360VC getCameraFOV];
-        NSLog(@"PinchZoom Begin: %f", recognizer.scale);
+        //NSLog(@"PinchZoom Begin: %f", recognizer.scale);
     }
     
-    NSLog(@"PinchZoom: %f", recognizer.scale);
+    //NSLog(@"PinchZoom: %f", recognizer.scale);
     [self.nyt360VC setCameraFOV:self.startFov / recognizer.scale];
 }
 
