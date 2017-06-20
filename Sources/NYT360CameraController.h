@@ -100,6 +100,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (double)getCameraFOV;
 
 - (void)setCameraFOV:(double)fov;
+- (void)setCameraFOVWithAnimation:(double)fov;
 
 - (void)setBranchMode:(BOOL)enable;
 

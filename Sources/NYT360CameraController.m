@@ -176,6 +176,13 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
     self.pointOfView.camera.yFov = fov > MAX_FOV ? MAX_FOV : (fov < MIN_Y_FOV ? MIN_Y_FOV : fov);
 }
 
+- (void)setCameraFOVWithAnimation:(double)fov {
+    [SCNTransaction begin];
+    [SCNTransaction setAnimationDuration:FOV_ANIMATION_DURATION];
+    [self setCameraFOV:fov];
+    [SCNTransaction commit];
+}
+
 - (void)setBranchMode:(BOOL)enable {
     self.isBranchMode = enable;
     //[self reorientVerticalCameraAngleToHorizon:true];

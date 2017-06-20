@@ -104,7 +104,7 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 - (void)addNode:(NSString*)urlString degree:(int)degree {
     [self.playerScene addNode:urlString degree:degree];
     [self.cameraController setBranchMode:true];
-    [self updateCameraFOV];
+    //[self updateCameraFOV];
     
     [self.degreeSet addObject:[NSNumber numberWithInt:degree]];
     NSLog(@"Set size: %d", self.degreeSet.count);
@@ -264,6 +264,10 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 
 - (void)setCameraFOV:(double)fov {
     [self.cameraController setCameraFOV:fov];
+}
+
+- (void)setCameraFOVWithAnimation:(double)fov {
+    [self.cameraController setCameraFOVWithAnimation:fov];
 }
 
 #pragma mark - SCNSceneRendererDelegate

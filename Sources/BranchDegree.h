@@ -20,6 +20,8 @@
 
 #define NODE_WIDTH_DIVIDOR 4.0
 
+#define FOV_ANIMATION_DURATION 0.7
+
 //#define NORMAL_Y_FOV 38.35 // (42.1875 / 1.1); // Calculated by xfov(360/5 degree) and 16/9 ratio
 //#define BRANCH_PORTRAIT_Y_FOV 110 // 85
 //#define BRANCH_LANDSCAPE_Y_FOV 50

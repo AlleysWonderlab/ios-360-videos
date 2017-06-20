@@ -142,6 +142,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setCameraFOV:(double)fov;
 
+- (void)setCameraFOVWithAnimation:(double)fov;
+
 @end
 
 NS_ASSUME_NONNULL_END
