@@ -238,13 +238,18 @@
     NSLog(@"replaceVideo end");
 }
 
+// @_@
 - (void)removeBranchNodes {
+    [SCNTransaction begin];
+
     NSMutableArray *removeNodes = [[NSMutableArray alloc] init];
     for (Branch* branch in self.branches) {
         [removeNodes addObject: branch.node];
+        [branch.node removeFromParent];
     }
     
-    [_skScene removeChildrenInArray:removeNodes];
+    [SCNTransaction commit];
+
     [self.branches removeAllObjects];
 }
 

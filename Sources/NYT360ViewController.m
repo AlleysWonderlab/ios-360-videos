@@ -111,6 +111,8 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 }
 
 - (void)selectBranch:(NSString*)videoUrl {
+    //NSLog(@"focusedNode: %d", _focusedNode);
+    
     if (_focusedNode > 0) {
         [self.playerScene replaceVideo:videoUrl degree:_focusedNode];
     } else {
