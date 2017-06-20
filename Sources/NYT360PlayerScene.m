@@ -182,7 +182,7 @@
     NSData* imageData = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlString]];
     UIImage* thumbnail = [UIImage imageWithData:imageData];
     int nodeX = 0;
-    if (degree < 180) {
+    if (degree <= 180) {
         nodeX = nodeWidth * (degree / 90.0);
     } else {
         nodeX = nodeWidth * ((180 - degree) / 90.0);
