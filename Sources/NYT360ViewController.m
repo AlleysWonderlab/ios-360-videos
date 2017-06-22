@@ -124,6 +124,10 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     [self.degreeSet removeAllObjects];
 }
 
+- (void)setMiniMapMode:(BOOL)enable {
+    [self.cameraController setMiniMapMode:enable];
+}
+
 
 #pragma mark - Camera Movement
 

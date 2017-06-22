@@ -14,10 +14,13 @@
 @interface ViewController ()
 
 @property (weak, nonatomic) IBOutlet UIView *playerContainer;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *mapHeight;
+
 
 @property (nonatomic) AVPlayer *player;
 @property (nonatomic) NYT360ViewController *nyt360VC;
 @property (nonatomic) double startFov;
+@property (nonatomic) bool map;
 
 @end
 
@@ -83,6 +86,14 @@
     [playButton setTitle:@"Play" forState:UIControlStateNormal];
     playButton.frame = CGRectMake(80.0, 200.0, 160.0, 40.0);
     [self.view addSubview:playButton];
+    
+    UIButton *mapButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [mapButton addTarget:self
+                   action:@selector(map:)
+         forControlEvents:UIControlEventTouchUpInside];
+    [mapButton setTitle:@"Map" forState:UIControlStateNormal];
+    mapButton.frame = CGRectMake(80.0, 250.0, 160.0, 40.0);
+    [self.view addSubview:mapButton];
 }
 
 - (void)reorientVerticalCameraAngle:(id)sender {
@@ -110,6 +121,18 @@
 
 - (IBAction)play:(id)sender {
     [self.nyt360VC play];
+}
+
+
+- (IBAction)map:(id)sender {
+    self.map = !self.map;
+    [self.nyt360VC setMiniMapMode:self.map];
+    
+    if (self.map == true) {
+        self.mapHeight.constant = 300;
+    } else {
+        self.mapHeight.constant = 0;
+    }
 }
 
 

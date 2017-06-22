@@ -93,6 +93,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)selectBranch:(NSString*)videoUrl;
 
+- (void)setMiniMapMode:(BOOL)enable;
+
 
 #pragma mark - Camera Movement
 

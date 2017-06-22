@@ -34,6 +34,7 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
 @property (nonatomic, assign) BOOL isAnimatingReorientation;
 @property (nonatomic, assign) BOOL hasReportedInitialCameraMovement;
 @property (nonatomic, assign) BOOL isBranchMode;
+@property (nonatomic, assign) BOOL isMiniMapMode;
 
 @end
 
@@ -162,6 +163,8 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
     if (isPortrait) {
         if (self.isBranchMode) {
             MAX_FOV = BRANCH_PORTRAIT_Y_FOV;
+        } else if (self.isMiniMapMode) {
+            MAX_FOV = MINIMAP_Y_FOV;
         } else {
             MAX_FOV = MAX_PORTRAIT_Y_FOV;
         }
@@ -186,6 +189,10 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
 - (void)setBranchMode:(BOOL)enable {
     self.isBranchMode = enable;
     //[self reorientVerticalCameraAngleToHorizon:true];
+}
+
+- (void)setMiniMapMode:(BOOL)enable {
+    self.isMiniMapMode = enable;
 }
 
 - (void)reorientVerticalCameraAngleToHorizon:(BOOL)animated {

@@ -61,6 +61,7 @@
                         </connections>
                     </view>
                     <connections>
+                        <outlet property="mapHeight" destination="Ly9-Eb-PcD" id="IeS-T9-QIi"/>
                         <outlet property="playerContainer" destination="xYd-MQ-BUu" id="zBn-ZI-DqZ"/>
                     </connections>
                 </viewController>
