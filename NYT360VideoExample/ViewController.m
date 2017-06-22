@@ -13,6 +13,8 @@
 
 @interface ViewController ()
 
+@property (weak, nonatomic) IBOutlet UIView *playerContainer;
+
 @property (nonatomic) AVPlayer *player;
 @property (nonatomic) NYT360ViewController *nyt360VC;
 @property (nonatomic) double startFov;
@@ -31,6 +33,7 @@
     //NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-ivv.mp4"];
     //NSURL * const videoURL = [[NSURL alloc] initWithString:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/U3/pSuGmKWGOwSiFwEOTV_g-navi.mp4"];
     self.player = [[AVPlayer alloc] initWithURL:videoURL];
+    self.player.muted = true;
     
     
 
@@ -44,7 +47,7 @@
 
     // Embed the player view controller in our UI, via view controller containment:
     [self addChildViewController:self.nyt360VC];
-    [self.view addSubview:self.nyt360VC.view];
+    [self.playerContainer addSubview:self.nyt360VC.view];
     [self.nyt360VC didMoveToParentViewController:self];
 
     // Begin playing the 360º video:

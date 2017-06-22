@@ -5,6 +5,7 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -19,12 +20,49 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="z7F-aY-0VO" userLabel="Video">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xYd-MQ-BUu" userLabel="Player Container">
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="xYd-MQ-BUu" firstAttribute="leading" secondItem="z7F-aY-0VO" secondAttribute="leading" id="9jP-0d-W3J"/>
+                                    <constraint firstAttribute="bottom" secondItem="xYd-MQ-BUu" secondAttribute="bottom" id="nZ4-eu-68d"/>
+                                    <constraint firstAttribute="trailing" secondItem="xYd-MQ-BUu" secondAttribute="trailing" id="q10-7J-rSy"/>
+                                    <constraint firstItem="xYd-MQ-BUu" firstAttribute="top" secondItem="z7F-aY-0VO" secondAttribute="top" id="r9w-Lf-BXy"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VeV-hX-mVU" userLabel="Minimap">
+                                <rect key="frame" x="0.0" y="667" width="375" height="0.0"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" id="Ly9-Eb-PcD"/>
+                                </constraints>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="z7F-aY-0VO" secondAttribute="trailing" id="ChB-I6-pJJ"/>
+                            <constraint firstItem="VeV-hX-mVU" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ICB-UB-26H"/>
+                            <constraint firstItem="z7F-aY-0VO" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="KTP-fT-QGg"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="VeV-hX-mVU" secondAttribute="bottom" id="Maf-YD-1UI"/>
+                            <constraint firstItem="z7F-aY-0VO" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" id="Y7X-7D-LeN"/>
+                            <constraint firstItem="VeV-hX-mVU" firstAttribute="top" secondItem="z7F-aY-0VO" secondAttribute="bottom" id="nox-kn-R3G"/>
+                            <constraint firstAttribute="trailing" secondItem="VeV-hX-mVU" secondAttribute="trailing" id="ump-dP-Ots"/>
+                        </constraints>
                         <connections>
                             <outletCollection property="gestureRecognizers" destination="ZKh-Zb-uZm" appends="YES" id="kPb-pN-PHb"/>
                         </connections>
                     </view>
+                    <connections>
+                        <outlet property="playerContainer" destination="xYd-MQ-BUu" id="zBn-ZI-DqZ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
                 <pinchGestureRecognizer delaysTouchesBegan="YES" id="ZKh-Zb-uZm">
