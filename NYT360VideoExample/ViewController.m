@@ -55,6 +55,7 @@
 
     // Begin playing the 360º video:
     [self.player play];
+    //[self.player pause];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.player.currentItem];
 
@@ -129,7 +130,7 @@
     [self.nyt360VC setMiniMapMode:self.map];
     
     if (self.map == true) {
-        self.mapHeight.constant = 300;
+        self.mapHeight.constant = self.view.frame.size.height / 2;
     } else {
         self.mapHeight.constant = 0;
     }

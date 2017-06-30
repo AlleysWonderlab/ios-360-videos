@@ -7,22 +7,16 @@
 //
 
 #import "NYT360EulerAngleCalculations.h"
+#import "BranchDegree.h"
 
 #pragma mark - Constants
 
 CGFloat const NYT360EulerAngleCalculationNoiseThresholdDefault = 0.12;
 float const NYT360EulerAngleCalculationDefaultReferenceCompassAngle = 0;
 
-
-// In portrait mode,
-// 120 is max fov with 0 margin,
-// and 35 is min fov with 0.61 fov margin.
 const static float POS_ORIGIN = 3.14;
-const static float MIN_FOV = 35.0;
-const static float MAX_FOV = 120.0;
-const static float MAX_FOV_MINIMAP = 89.0;
 const static float MARGIN_RANGE = 0.61;
-const static float MARGIN_RANGE_MINIMAP = 0.48;
+const static float MARGIN_RANGE_MINIMAP = 0.45;
 
 
 #pragma mark - Inline Functions
@@ -194,19 +188,23 @@ float NYT360CompassAngleForEulerAngles(SCNVector3 eulerAngles, float referenceAn
     return NYT360UnitRotationForCameraRotation((-1.0 * eulerAngles.y) + referenceAngle);
 }
 
+
+// In portrait mode,
+// 120 is max fov with 0 margin,
+// and 35 is min fov with 0.61 fov margin.
 CGPoint LimitPositionByFov(CGPoint position, double fov, BOOL minimap) {
     //NSLog(@"!posX: %f, fov: %f", position.x, fov);
 
-    if (fov >= (minimap ? MAX_FOV_MINIMAP : MAX_FOV)) {
+    if (fov >= (minimap ? MAX_MINIMAP_Y_FOV : MAX_PORTRAIT_Y_FOV)) {
         position.x = POS_ORIGIN;
         return position;
     }
 
     
     float range = minimap ? MARGIN_RANGE_MINIMAP : MARGIN_RANGE;
-    float maxFov = minimap ? MAX_FOV_MINIMAP : MAX_FOV;
+    float maxFov = minimap ? MAX_MINIMAP_Y_FOV : MAX_PORTRAIT_Y_FOV;
     
-    float margin = range * (1 - (fov - MIN_FOV) / (maxFov - MIN_FOV));
+    float margin = range * (1 - (fov - MIN_Y_FOV) / (maxFov - MIN_Y_FOV));
     
     if (position.x >= POS_ORIGIN + margin) {
         position.x = POS_ORIGIN + margin;

@@ -164,7 +164,7 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
         if (self.isBranchMode) {
             MAX_FOV = BRANCH_PORTRAIT_Y_FOV;
         } else if (self.isMiniMapMode) {
-            MAX_FOV = MINIMAP_Y_FOV;
+            MAX_FOV = MAX_MINIMAP_Y_FOV;
         } else {
             MAX_FOV = MAX_PORTRAIT_Y_FOV;
         }
