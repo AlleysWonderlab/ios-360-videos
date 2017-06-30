@@ -112,7 +112,7 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
 
     NYT360EulerAngleCalculationResult result;
-    result = NYT360DeviceMotionCalculation(self.currentPosition, rotationRate, orientation, self.allowedDeviceMotionPanningAxes, NYT360EulerAngleCalculationNoiseThresholdDefault, self.pointOfView.camera.yFov, self.isBranchMode);
+    result = NYT360DeviceMotionCalculation(self.currentPosition, rotationRate, orientation, self.allowedDeviceMotionPanningAxes, NYT360EulerAngleCalculationNoiseThresholdDefault, self.pointOfView.camera.yFov, self.isBranchMode, self.isMiniMapMode);
     self.currentPosition = result.position;
     self.pointOfView.eulerAngles = result.eulerAngles;
 
@@ -267,7 +267,7 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
             self.rotateCurrent = point;
             self.rotateDelta = subtractPoints(self.rotateStart, self.rotateCurrent);
             self.rotateStart = self.rotateCurrent;
-            NYT360EulerAngleCalculationResult result = NYT360PanGestureChangeCalculation(self.currentPosition, self.rotateDelta, self.view.bounds.size, self.allowedPanGesturePanningAxes, self.pointOfView.camera.yFov, self.isBranchMode, orientation);
+            NYT360EulerAngleCalculationResult result = NYT360PanGestureChangeCalculation(self.currentPosition, self.rotateDelta, self.view.bounds.size, self.allowedPanGesturePanningAxes, self.pointOfView.camera.yFov, self.isBranchMode, self.isMiniMapMode, orientation);
             self.currentPosition = result.position;
             self.pointOfView.eulerAngles = result.eulerAngles;
 

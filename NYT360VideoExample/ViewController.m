@@ -38,6 +38,7 @@
     self.player = [[AVPlayer alloc] initWithURL:videoURL];
     self.player.muted = true;
     
+    [self.playerContainer layoutIfNeeded];
     
 
     // Create a NYT360ViewController with the AVPlayer and our app's motion manager:
@@ -46,7 +47,6 @@
     
     
     self.nyt360VC.delegate = self;
-    
 
     // Embed the player view controller in our UI, via view controller containment:
     [self addChildViewController:self.nyt360VC];

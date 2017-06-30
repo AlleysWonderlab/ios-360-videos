@@ -27,9 +27,9 @@ typedef struct NYT360EulerAngleCalculationResult NYT360EulerAngleCalculationResu
 
 NYT360EulerAngleCalculationResult NYT360UpdatedPositionAndAnglesForAllowedAxes(CGPoint position, NYT360PanningAxis allowedPanningAxes);
 
-NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position, CMRotationRate rotationRate, UIInterfaceOrientation orientation, NYT360PanningAxis allowedPanningAxes, CGFloat noiseThreshold, double fov, BOOL branchMode);
+NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position, CMRotationRate rotationRate, UIInterfaceOrientation orientation, NYT360PanningAxis allowedPanningAxes, CGFloat noiseThreshold, double fov, BOOL branchMode, BOOL minimapMode);
 
-NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint position, CGPoint rotateDelta, CGSize viewSize, NYT360PanningAxis allowedPanningAxes, double fov, BOOL branchMode, UIInterfaceOrientation orientation);
+NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint position, CGPoint rotateDelta, CGSize viewSize, NYT360PanningAxis allowedPanningAxes, double fov, BOOL branchMode, BOOL minimapMode, UIInterfaceOrientation orientation);
 
 CGFloat NYT360OptimalYFovForViewSize(CGSize viewSize);
 
@@ -50,4 +50,4 @@ CGFloat NYT360OptimalYFovForViewSize(CGSize viewSize);
  */
 float NYT360CompassAngleForEulerAngles(SCNVector3 eulerAngles, float referenceAngle);
 
-CGPoint LimitPositionByFov(CGPoint position, double fov);
+CGPoint LimitPositionByFov(CGPoint position, double fov, BOOL minimap);

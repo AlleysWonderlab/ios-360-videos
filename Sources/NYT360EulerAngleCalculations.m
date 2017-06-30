@@ -13,6 +13,18 @@
 CGFloat const NYT360EulerAngleCalculationNoiseThresholdDefault = 0.12;
 float const NYT360EulerAngleCalculationDefaultReferenceCompassAngle = 0;
 
+
+// In portrait mode,
+// 120 is max fov with 0 margin,
+// and 35 is min fov with 0.61 fov margin.
+const static float POS_ORIGIN = 3.14;
+const static float MIN_FOV = 35.0;
+const static float MAX_FOV = 120.0;
+const static float MAX_FOV_MINIMAP = 89.0;
+const static float MARGIN_RANGE = 0.61;
+const static float MARGIN_RANGE_MINIMAP = 0.48;
+
+
 #pragma mark - Inline Functions
 
 static inline CGFloat NYT360Clamp(CGFloat x, CGFloat low, CGFloat high) {
@@ -63,7 +75,7 @@ NYT360EulerAngleCalculationResult NYT360UpdatedPositionAndAnglesForAllowedAxes(C
     return NYT360EulerAngleCalculationResultMake(position, eulerAngles);
 }
 
-NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position, CMRotationRate rotationRate, UIInterfaceOrientation orientation, NYT360PanningAxis allowedPanningAxes, CGFloat noiseThreshold, double fov, BOOL branchMode) {
+NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position, CMRotationRate rotationRate, UIInterfaceOrientation orientation, NYT360PanningAxis allowedPanningAxes, CGFloat noiseThreshold, double fov, BOOL branchMode, BOOL minimapMode) {
     
     static CGFloat NYT360EulerAngleCalculationRotationRateDampingFactor = 0.01;
     //static CGFloat NYT360EulerAngleCalculationRotationRateDampingFactor = 0.02;
@@ -116,7 +128,7 @@ NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position
         if (UIInterfaceOrientationIsLandscape(orientation)) {
             position.x = 3.14;
         } else {
-            position = LimitPositionByFov(position, fov);
+            position = LimitPositionByFov(position, fov, minimapMode);
         }
     }
 
@@ -126,7 +138,7 @@ NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position
     return NYT360EulerAngleCalculationResultMake(position, eulerAngles);
 }
 
-NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint position, CGPoint rotateDelta, CGSize viewSize, NYT360PanningAxis allowedPanningAxes, double fov, BOOL branchMode, UIInterfaceOrientation orientation) {
+NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint position, CGPoint rotateDelta, CGSize viewSize, NYT360PanningAxis allowedPanningAxes, double fov, BOOL branchMode, BOOL minimapMode, UIInterfaceOrientation orientation) {
     
     // TODO: [jaredsinclair] Consider adding constants for the multipliers.
     
@@ -145,7 +157,7 @@ NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint posi
         if (UIInterfaceOrientationIsLandscape(orientation)) {
             position.x = 3.14;
         } else {
-            position = LimitPositionByFov(position, fov);
+            position = LimitPositionByFov(position, fov, minimapMode);
         }
     }
     
@@ -182,28 +194,19 @@ float NYT360CompassAngleForEulerAngles(SCNVector3 eulerAngles, float referenceAn
     return NYT360UnitRotationForCameraRotation((-1.0 * eulerAngles.y) + referenceAngle);
 }
 
-CGPoint LimitPositionByFov(CGPoint position, double fov) {
-    //NSLog(@"posX: %f, fov: %f", position.x, fov);
-    
-    // In portrait mode,
-    // 120 is max fov with 0 margin,
-    // and 35 is min fov with 0.61 fov margin.
-    
-    static float POS_ORIGIN = 3.14;
-    static float FOV_RANGE = 120.0 - 35.0;
-    static float MARGIN_RANGE = 0.61;
-    
+CGPoint LimitPositionByFov(CGPoint position, double fov, BOOL minimap) {
+    //NSLog(@"!posX: %f, fov: %f", position.x, fov);
 
-    if (fov >= 120) {
+    if (fov >= (minimap ? MAX_FOV_MINIMAP : MAX_FOV)) {
         position.x = POS_ORIGIN;
         return position;
     }
 
     
-    //float margin = MARGIN_RANGE - MARGIN_RANGE * (fov - 35.0) / FOV_RANGE;
-    float margin = MARGIN_RANGE * (1 - (fov - 35.0) / FOV_RANGE);
+    float range = minimap ? MARGIN_RANGE_MINIMAP : MARGIN_RANGE;
+    float maxFov = minimap ? MAX_FOV_MINIMAP : MAX_FOV;
     
-    //NSLog(@"margin: %f", margin);
+    float margin = range * (1 - (fov - MIN_FOV) / (maxFov - MIN_FOV));
     
     if (position.x >= POS_ORIGIN + margin) {
         position.x = POS_ORIGIN + margin;
@@ -213,3 +216,4 @@ CGPoint LimitPositionByFov(CGPoint position, double fov) {
     
     return position;
 }
+
