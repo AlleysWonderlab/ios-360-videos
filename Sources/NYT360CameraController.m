@@ -274,7 +274,7 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
             self.rotateCurrent = point;
             self.rotateDelta = subtractPoints(self.rotateStart, self.rotateCurrent);
             self.rotateStart = self.rotateCurrent;
-            NYT360EulerAngleCalculationResult result = NYT360PanGestureChangeCalculation(self.currentPosition, self.rotateDelta, self.view.bounds.size, self.allowedPanGesturePanningAxes, self.pointOfView.camera.yFov, self.isBranchMode, self.isMiniMapMode, orientation);
+            NYT360EulerAngleCalculationResult result = NYT360PanGestureChangeCalculation(self.currentPosition, self.rotateDelta, self.view.bounds.size, self.allowedPanGesturePanningAxes, self.pointOfView.camera.yFov, self.isBranchMode, self.isMiniMapMode, self.isLandscapeMode);
             self.currentPosition = result.position;
             self.pointOfView.eulerAngles = result.eulerAngles;
 
