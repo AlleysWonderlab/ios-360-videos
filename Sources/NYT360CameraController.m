@@ -111,8 +111,8 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
 
     CMRotationRate rotationRate = self.motionManager.deviceMotion.rotationRate;
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-    if (self.isLandscapeMode == false) {
-        orientation = UIInterfaceOrientationPortrait;
+    if (self.isLandscapeMode) {
+        orientation = UIInterfaceOrientationLandscapeLeft;
     }
 
     NYT360EulerAngleCalculationResult result;
