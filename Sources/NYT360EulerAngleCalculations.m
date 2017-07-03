@@ -132,7 +132,7 @@ NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position
     return NYT360EulerAngleCalculationResultMake(position, eulerAngles);
 }
 
-NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint position, CGPoint rotateDelta, CGSize viewSize, NYT360PanningAxis allowedPanningAxes, double fov, BOOL branchMode, BOOL minimapMode, UIInterfaceOrientation orientation) {
+NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint position, CGPoint rotateDelta, CGSize viewSize, NYT360PanningAxis allowedPanningAxes, double fov, BOOL branchMode, BOOL minimapMode, BOOL landscape) {
     
     // TODO: [jaredsinclair] Consider adding constants for the multipliers.
     
@@ -148,7 +148,7 @@ NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint posi
     position = NYT360AdjustPositionForAllowedAxes(position, allowedPanningAxes);
     
     if (branchMode == false) {
-        if (UIInterfaceOrientationIsLandscape(orientation)) {
+        if (landscape) {
             position.x = 3.14;
         } else {
             position = LimitPositionByFov(position, fov, minimapMode);

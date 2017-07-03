@@ -93,6 +93,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)selectBranch:(NSString*)videoUrl;
 
+- (void)setLandscapeMode:(BOOL)enable;
 - (void)setMiniMapMode:(BOOL)enable;
 
 

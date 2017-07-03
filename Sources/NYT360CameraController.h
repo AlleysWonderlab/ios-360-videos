@@ -103,6 +103,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setCameraFOVWithAnimation:(double)fov;
 
 - (void)setBranchMode:(BOOL)enable;
+- (void)setLandscapeMode:(BOOL)enable;
 - (void)setMiniMapMode:(BOOL)enable;
 
 /**

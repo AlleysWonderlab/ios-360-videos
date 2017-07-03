@@ -124,6 +124,10 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     [self.degreeSet removeAllObjects];
 }
 
+- (void)setLandscapeMode:(BOOL)enable {
+    [self.cameraController setLandscapeMode:enable];
+}
+
 - (void)setMiniMapMode:(BOOL)enable {
     [self.cameraController setMiniMapMode:enable];
 }

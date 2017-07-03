@@ -29,7 +29,8 @@ NYT360EulerAngleCalculationResult NYT360UpdatedPositionAndAnglesForAllowedAxes(C
 
 NYT360EulerAngleCalculationResult NYT360DeviceMotionCalculation(CGPoint position, CMRotationRate rotationRate, UIInterfaceOrientation orientation, NYT360PanningAxis allowedPanningAxes, CGFloat noiseThreshold, double fov, BOOL branchMode, BOOL minimapMode);
 
-NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint position, CGPoint rotateDelta, CGSize viewSize, NYT360PanningAxis allowedPanningAxes, double fov, BOOL branchMode, BOOL minimapMode, UIInterfaceOrientation orientation);
+NYT360EulerAngleCalculationResult NYT360PanGestureChangeCalculation(CGPoint position, CGPoint rotateDelta, CGSize viewSize, NYT360PanningAxis allowedPanningAxes, double fov, BOOL branchMode, BOOL minimapMode, BOOL landscape);
+
 
 CGFloat NYT360OptimalYFovForViewSize(CGSize viewSize);
 

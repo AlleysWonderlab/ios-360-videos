@@ -34,6 +34,7 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
 @property (nonatomic, assign) BOOL isAnimatingReorientation;
 @property (nonatomic, assign) BOOL hasReportedInitialCameraMovement;
 @property (nonatomic, assign) BOOL isBranchMode;
+@property (nonatomic, assign) BOOL isLandscapeMode;
 @property (nonatomic, assign) BOOL isMiniMapMode;
 
 @end
@@ -110,6 +111,9 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
 
     CMRotationRate rotationRate = self.motionManager.deviceMotion.rotationRate;
     UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+    if (self.isLandscapeMode == false) {
+        orientation = UIInterfaceOrientationPortrait;
+    }
 
     NYT360EulerAngleCalculationResult result;
     result = NYT360DeviceMotionCalculation(self.currentPosition, rotationRate, orientation, self.allowedDeviceMotionPanningAxes, NYT360EulerAngleCalculationNoiseThresholdDefault, self.pointOfView.camera.yFov, self.isBranchMode, self.isMiniMapMode);
@@ -143,10 +147,10 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
         self.pointOfView.camera.yFov = xFov * screenRatio;
     } else {
         if (self.isBranchMode) {
-            if (UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation)) {
-                self.pointOfView.camera.yFov = BRANCH_PORTRAIT_Y_FOV;
-            } else {
+            if (self.isLandscapeMode) {
                 self.pointOfView.camera.yFov = BRANCH_LANDSCAPE_Y_FOV;
+            } else {
+                self.pointOfView.camera.yFov = BRANCH_PORTRAIT_Y_FOV;
             }
         } else {
             self.pointOfView.camera.yFov = NORMAL_Y_FOV;
@@ -158,21 +162,20 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
 
 - (void)setCameraFOV:(double)fov {
     double MAX_FOV = NORMAL_Y_FOV;
-    bool isPortrait = UIInterfaceOrientationIsPortrait([UIApplication sharedApplication].statusBarOrientation);
-    
-    if (isPortrait) {
+
+    if (self.isLandscapeMode) {
+        if (self.isBranchMode) {
+            MAX_FOV = BRANCH_LANDSCAPE_Y_FOV;
+        } else {
+            MAX_FOV = MAX_LANDSCAPE_Y_FOV;
+        }
+    } else {
         if (self.isBranchMode) {
             MAX_FOV = BRANCH_PORTRAIT_Y_FOV;
         } else if (self.isMiniMapMode) {
             MAX_FOV = MAX_MINIMAP_Y_FOV;
         } else {
             MAX_FOV = MAX_PORTRAIT_Y_FOV;
-        }
-    } else {
-        if (self.isBranchMode) {
-            MAX_FOV = BRANCH_LANDSCAPE_Y_FOV;
-        } else {
-            MAX_FOV = MAX_LANDSCAPE_Y_FOV;
         }
     }
 
@@ -189,6 +192,10 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
 - (void)setBranchMode:(BOOL)enable {
     self.isBranchMode = enable;
     //[self reorientVerticalCameraAngleToHorizon:true];
+}
+
+- (void)setLandscapeMode:(BOOL)enable {
+    self.isLandscapeMode = enable;
 }
 
 - (void)setMiniMapMode:(BOOL)enable {
