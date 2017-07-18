@@ -124,6 +124,10 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     [self.degreeSet removeAllObjects];
 }
 
+- (void)replaceVideo:(NSString*)videoUrl {
+    [self.playerScene replaceVideo:videoUrl];
+}
+
 - (void)setLandscapeMode:(BOOL)enable {
     [self.cameraController setLandscapeMode:enable];
 }

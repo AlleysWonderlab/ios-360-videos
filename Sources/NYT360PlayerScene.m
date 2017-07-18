@@ -238,6 +238,25 @@
     NSLog(@"replaceVideo end");
 }
 
+- (void)replaceVideo:(NSString*)videoUrl {
+    if (_videoNode != nil) { [_skScene removeAllChildren]; }
+    
+    NSURL * const url = [[NSURL alloc] initWithString:videoUrl];
+    AVPlayerItem *item = [AVPlayerItem playerItemWithURL:url];
+    [_player replaceCurrentItemWithPlayerItem:item];
+    
+    _videoNode = ({
+        NYTSKVideoNode *videoNode = [[NYTSKVideoNode alloc] initWithAVPlayer:_player];
+        videoNode.size = CGSizeMake(nodeWidth, nodeHeight); // 28mm == 75 degree ~= 360/5 degree
+        videoNode.position = CGPointMake(nodeCenterX, nodeCenterY);
+        videoNode.yScale = -1;
+        videoNode.xScale = 1;
+        videoNode.nyt_delegate = self;
+        videoNode;
+    });
+    [_skScene addChild:_videoNode];
+}
+
 // @_@
 - (void)removeBranchNodes {
     [SCNTransaction begin];

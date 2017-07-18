@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)addNode:(NSString*)urlString degree:(int)degree;
 - (void)replaceVideo:(NSString*)videoUrl degree:(int)degree;
+- (void)replaceVideo:(NSString*)videoUrl;
 - (void)removeBranchNodes;
 
 @end

@@ -92,7 +92,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  When user want to switch branch, it called.
  */
 - (void)selectBranch:(NSString*)videoUrl;
-
+- (void)replaceVideo:(NSString*)videoUrl;
 - (void)setLandscapeMode:(BOOL)enable;
 - (void)setMiniMapMode:(BOOL)enable;
 

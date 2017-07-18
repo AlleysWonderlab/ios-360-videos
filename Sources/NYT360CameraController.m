@@ -264,7 +264,6 @@ static inline CGPoint subtractPoints(CGPoint a, CGPoint b) {
     if (self.isAnimatingReorientation) { return; }
     
     CGPoint point = [recognizer locationInView:self.view];
-    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
     
     switch (recognizer.state) {
         case UIGestureRecognizerStateBegan:
