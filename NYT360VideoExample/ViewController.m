@@ -100,7 +100,7 @@
     [replaceButton addTarget:self
                   action:@selector(replaceVideo:)
         forControlEvents:UIControlEventTouchUpInside];
-    [replaceButton setTitle:@"Replace Video" forState:UIControlStateNormal];
+    [replaceButton setTitle:@"Off PoiMode" forState:UIControlStateNormal];
     replaceButton.frame = CGRectMake(80.0, 300.0, 160.0, 40.0);
     [self.view addSubview:replaceButton];
     
@@ -154,7 +154,7 @@
 }
 
 - (IBAction)replaceVideo:(id)sender {
-    [self.nyt360VC replaceVideo:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/pP/zJQAQmoGi7D1hQVI9khQ-ivv.mp4"];
+    [self.nyt360VC offPoiMode];
 }
 
 - (IBAction)addPoi:(id)sender {

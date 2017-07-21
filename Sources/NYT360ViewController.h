@@ -101,6 +101,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  Add Branch node
  */
 - (void)addPoi:(UIImage*)image degree:(int)degree;
+- (void)offPoiMode;
 
 
 #pragma mark - Camera Movement

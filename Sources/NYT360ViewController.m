@@ -114,6 +114,10 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     [self.playerScene addPoi:image degree:degree];
 }
 
+- (void)offPoiMode {
+    [self.playerScene removePoiNodes];
+}
+
 - (void)selectBranch:(NSString*)videoUrl {
     //NSLog(@"focusedNode: %d", _focusedNode);
     
@@ -129,7 +133,8 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 }
 
 - (void)replaceVideo:(NSString*)videoUrl {
-    [self.playerScene replaceVideo:videoUrl];
+    //[self.playerScene replaceVideo:videoUrl];
+    
 }
 
 - (void)setLandscapeMode:(BOOL)enable {
