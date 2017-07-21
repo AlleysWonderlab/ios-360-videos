@@ -12,6 +12,7 @@
 #import "NYT360PlayerScene.h"
 #import "Branch.h"
 #import "BranchDegree.h"
+#import "Poi.h"
 
 
 @class NYTSKVideoNode;
@@ -70,6 +71,7 @@
 @property (nonatomic, readonly) NYTSKVideoNode *videoNode;
 @property (nonatomic, readonly) AVPlayer *player;
 @property (nonatomic, strong) NSMutableArray *branches;
+@property (nonatomic, strong) NSMutableArray *pois;
 
 - (Branch *)getBranch:(int)degree;
 
@@ -86,6 +88,7 @@
         
         _player = player;
         _branches = [[NSMutableArray alloc] init];
+        _pois = [[NSMutableArray alloc] init];
         
         _camera = [SCNCamera new];
         //_camera.wantsHDR = YES;
@@ -203,6 +206,23 @@
     [self.branches addObject:branch];
 }
 
+- (void)addPoi:(UIImage *)image degree:(int)degree {
+    int nodeX = nodeWidth * (degree / 90.0);
+    
+    SKNode *poiNode = ({
+        SKSpriteNode *node = [SKSpriteNode spriteNodeWithTexture:[SKTexture textureWithImage:image]];
+        node.size = CGSizeMake(poiWidth, poiHeight);
+        node.position = CGPointMake(nodeCenterX + nodeX, nodeCenterY);
+        node.yScale = -1;
+        node.xScale = 1;
+        node;
+    });
+    [_skScene addChild:poiNode];
+    
+    Poi *poi = [[Poi alloc] initWithSKNode:poiNode degree:degree];
+    [self.pois addObject:poi];
+}
+
 - (void)replaceVideo:(NSString*)videoUrl degree:(int)degree {
     Branch *branch = [self getBranch:degree];
     branch.node.position = CGPointMake(nodeCenterX, nodeCenterY);
@@ -270,6 +290,16 @@
     [SCNTransaction commit];
 
     [self.branches removeAllObjects];
+}
+
+- (void)removePoiNodes {
+    [SCNTransaction begin];
+    for (Poi* poi in self.pois) {
+        [poi.node removeFromParent];
+    }
+    [SCNTransaction commit];
+    
+    [self.pois removeAllObjects];
 }
 
 - (Branch *)getBranch:(int)degree {

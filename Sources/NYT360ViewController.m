@@ -110,6 +110,10 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     NSLog(@"Set size: %d", self.degreeSet.count);
 }
 
+- (void)addPoi:(UIImage *)image degree:(int)degree {
+    [self.playerScene addPoi:image degree:degree];
+}
+
 - (void)selectBranch:(NSString*)videoUrl {
     //NSLog(@"focusedNode: %d", _focusedNode);
     

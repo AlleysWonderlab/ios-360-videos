@@ -97,6 +97,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setMiniMapMode:(BOOL)enable;
 
 
+/**
+ *  Add Branch node
+ */
+- (void)addPoi:(UIImage*)image degree:(int)degree;
+
+
 #pragma mark - Camera Movement
 
 /**

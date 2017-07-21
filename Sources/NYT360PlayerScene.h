@@ -27,6 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)replaceVideo:(NSString*)videoUrl degree:(int)degree;
 - (void)replaceVideo:(NSString*)videoUrl;
 - (void)removeBranchNodes;
+- (void)addPoi:(UIImage *)image degree:(int)degree;
+- (void)removePoiNodes;
 
 @end
 

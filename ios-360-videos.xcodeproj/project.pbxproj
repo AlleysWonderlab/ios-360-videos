@@ -40,6 +40,7 @@
 		934A498D1D46B446001AD295 /* NYT360ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 934A49871D46B446001AD295 /* NYT360ViewController.m */; };
 		934A498E1D46B525001AD295 /* NYT360Video.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 934A49491D46B0A1001AD295 /* NYT360Video.framework */; };
 		934A49941D46B9E9001AD295 /* NYT360Video.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 934A49491D46B0A1001AD295 /* NYT360Video.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AC3FD3361F21EC9500FEF61C /* Poi.m in Sources */ = {isa = PBXBuildFile; fileRef = AC3FD3351F21EC9500FEF61C /* Poi.m */; };
 		ACB4776C1EDEBE2B00267B7E /* Branch.h in Headers */ = {isa = PBXBuildFile; fileRef = ACB4776B1EDEBE2B00267B7E /* Branch.h */; };
 		ACB4776E1EDEC1F900267B7E /* Branch.m in Sources */ = {isa = PBXBuildFile; fileRef = ACB4776D1EDEC1F900267B7E /* Branch.m */; };
 /* End PBXBuildFile section */
@@ -106,6 +107,8 @@
 		934A49871D46B446001AD295 /* NYT360ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NYT360ViewController.m; sourceTree = "<group>"; };
 		934A49961D46BBB6001AD295 /* NYT360Video.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = NYT360Video.podspec; sourceTree = "<group>"; };
 		AC332C1E1ED69009000AD138 /* BranchDegree.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BranchDegree.h; sourceTree = "<group>"; };
+		AC3FD3351F21EC9500FEF61C /* Poi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Poi.m; sourceTree = "<group>"; };
+		AC3FD3371F21ECA500FEF61C /* Poi.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Poi.h; sourceTree = "<group>"; };
 		ACB4776B1EDEBE2B00267B7E /* Branch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Branch.h; sourceTree = "<group>"; };
 		ACB4776D1EDEC1F900267B7E /* Branch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Branch.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -178,6 +181,8 @@
 				ACB4776B1EDEBE2B00267B7E /* Branch.h */,
 				ACB4776D1EDEC1F900267B7E /* Branch.m */,
 				AC332C1E1ED69009000AD138 /* BranchDegree.h */,
+				AC3FD3371F21ECA500FEF61C /* Poi.h */,
+				AC3FD3351F21EC9500FEF61C /* Poi.m */,
 				934A49531D46B119001AD295 /* Info.plist */,
 			);
 			path = Sources;
@@ -383,6 +388,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC3FD3361F21EC9500FEF61C /* Poi.m in Sources */,
 				ACB4776E1EDEC1F900267B7E /* Branch.m in Sources */,
 				934A498D1D46B446001AD295 /* NYT360ViewController.m in Sources */,
 				47ACFE351D54DFC70054F8D0 /* NYT360CameraPanGestureRecognizer.m in Sources */,

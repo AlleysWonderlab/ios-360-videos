@@ -96,7 +96,6 @@
     mapButton.frame = CGRectMake(80.0, 250.0, 160.0, 40.0);
     [self.view addSubview:mapButton];
     
-    
     UIButton *replaceButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [replaceButton addTarget:self
                   action:@selector(replaceVideo:)
@@ -104,6 +103,15 @@
     [replaceButton setTitle:@"Replace Video" forState:UIControlStateNormal];
     replaceButton.frame = CGRectMake(80.0, 300.0, 160.0, 40.0);
     [self.view addSubview:replaceButton];
+    
+    
+    UIButton *poiButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [poiButton addTarget:self
+                      action:@selector(addPoi:)
+            forControlEvents:UIControlEventTouchUpInside];
+    [poiButton setTitle:@"Add Poi" forState:UIControlStateNormal];
+    poiButton.frame = CGRectMake(80.0, 350.0, 160.0, 40.0);
+    [self.view addSubview:poiButton];
 }
 
 - (void)reorientVerticalCameraAngle:(id)sender {
@@ -149,6 +157,10 @@
     [self.nyt360VC replaceVideo:@"https://v-2-alleys-co.s3.dualstack.ap-northeast-1.amazonaws.com/pP/zJQAQmoGi7D1hQVI9khQ-ivv.mp4"];
 }
 
+- (IBAction)addPoi:(id)sender {
+    [self.nyt360VC addPoi:[UIImage imageNamed:@"ic_current_loc"] degree:-20]; // left
+    [self.nyt360VC addPoi:[UIImage imageNamed:@"ic_globe_selected"] degree:20];
+}
 
 - (IBAction)pinchZoom:(UIPinchGestureRecognizer *)recognizer {
     if (recognizer.state == UIGestureRecognizerStateBegan) {
