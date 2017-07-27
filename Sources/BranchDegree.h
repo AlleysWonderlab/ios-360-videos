@@ -47,8 +47,8 @@ static int nodeHeight = HEIGHT;
 static int nodeCenterX = SCENE_WIDTH / 2;
 static int nodeCenterY = SCENE_HEIGHT / 2;
 
-static int poiWidth = 64;
-static int poiHeight = 64;
+static int poiWidth = 80;
+static int poiHeight = 80;
 
 
 #endif /* BranchDegree_h */
