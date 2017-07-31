@@ -133,7 +133,7 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
 }
 
 - (void)replaceVideo:(NSString*)videoUrl {
-    //[self.playerScene replaceVideo:videoUrl];
+    [self.playerScene replaceVideo:videoUrl];
     
 }
 
