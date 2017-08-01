@@ -294,9 +294,13 @@
 
 - (void)removePoiNodes {
     [SCNTransaction begin];
+    
+    NSMutableArray *removeNodes = [[NSMutableArray alloc] init];
     for (Poi* poi in self.pois) {
+        [removeNodes addObject: poi.node];
         [poi.node removeFromParent];
     }
+    
     [SCNTransaction commit];
     
     [self.pois removeAllObjects];
