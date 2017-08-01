@@ -277,13 +277,12 @@
     [_skScene addChild:_videoNode];
 }
 
-// @_@
 - (void)removeBranchNodes {
     [SCNTransaction begin];
 
-    NSMutableArray *removeNodes = [[NSMutableArray alloc] init];
+    NSMutableArray *arcHolder = [[NSMutableArray alloc] init];
     for (Branch* branch in self.branches) {
-        [removeNodes addObject: branch.node];
+        [arcHolder addObject: branch.node];
         [branch.node removeFromParent];
     }
     
@@ -295,9 +294,9 @@
 - (void)removePoiNodes {
     [SCNTransaction begin];
     
-    NSMutableArray *removeNodes = [[NSMutableArray alloc] init];
+    NSMutableArray *arcHolder = [[NSMutableArray alloc] init];
     for (Poi* poi in self.pois) {
-        [removeNodes addObject: poi.node];
+        [arcHolder addObject: poi.node];
         [poi.node removeFromParent];
     }
     
