@@ -55,7 +55,7 @@
 
     // Begin playing the 360º video:
     [self.player play];
-    //[self.player pause];
+    [self.player pause];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(itemDidFinishPlaying:) name:AVPlayerItemDidPlayToEndTimeNotification object:self.player.currentItem];
 
@@ -104,7 +104,6 @@
     replaceButton.frame = CGRectMake(80.0, 300.0, 160.0, 40.0);
     [self.view addSubview:replaceButton];
     
-    
     UIButton *poiButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [poiButton addTarget:self
                       action:@selector(addPoi:)
@@ -112,6 +111,23 @@
     [poiButton setTitle:@"Add Poi" forState:UIControlStateNormal];
     poiButton.frame = CGRectMake(80.0, 350.0, 160.0, 40.0);
     [self.view addSubview:poiButton];
+    
+    UIButton *seekButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [seekButton addTarget:self
+                  action:@selector(seekTo:)
+        forControlEvents:UIControlEventTouchUpInside];
+    [seekButton setTitle:@"Seek" forState:UIControlStateNormal];
+    seekButton.frame = CGRectMake(80.0, 400.0, 160.0, 40.0);
+    [self.view addSubview:seekButton];
+    
+    
+    UIButton *pauseButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [pauseButton addTarget:self
+                   action:@selector(pause:)
+         forControlEvents:UIControlEventTouchUpInside];
+    [pauseButton setTitle:@"Pause" forState:UIControlStateNormal];
+    pauseButton.frame = CGRectMake(80.0, 450.0, 160.0, 40.0);
+    [self.view addSubview:pauseButton];
 }
 
 - (void)reorientVerticalCameraAngle:(id)sender {
@@ -141,6 +157,9 @@
     [self.nyt360VC play];
 }
 
+- (IBAction)pause:(id)sender {
+    [self.nyt360VC pause];
+}
 
 - (IBAction)map:(id)sender {
     self.map = !self.map;
@@ -160,6 +179,11 @@
 - (IBAction)addPoi:(id)sender {
     [self.nyt360VC addPoi:[UIImage imageNamed:@"ic_current_loc"] degree:-20]; // left
     [self.nyt360VC addPoi:[UIImage imageNamed:@"ic_globe_selected"] degree:20];
+}
+
+- (IBAction)seekTo:(id)sender {
+    [self.player seekToTime:CMTimeMakeWithSeconds(20.0, 1.0)];
+    [self.nyt360VC pauseRefreshVideo];
 }
 
 - (IBAction)pinchZoom:(UIPinchGestureRecognizer *)recognizer {

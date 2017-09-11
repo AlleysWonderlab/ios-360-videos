@@ -101,6 +101,10 @@ CGRect NYT360ViewControllerSceneBoundsForScreenBounds(CGRect screenBounds) {
     [self.playerScene pause];
 }
 
+- (void)pauseRefreshVideo {
+    [self.playerScene pauseRefreshVideo];
+}
+
 - (void)addNode:(NSString*)urlString degree:(int)degree {
     [self.playerScene addNode:urlString degree:degree];
     [self.cameraController setBranchMode:true];

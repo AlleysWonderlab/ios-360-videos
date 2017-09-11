@@ -166,6 +166,8 @@
 }
 
 - (void)pause {
+    //[self.player pause];
+    
     // See note in NYTSKVideoNode above.
     self.videoPlaybackIsPaused = YES;
     
@@ -176,7 +178,13 @@
         [self.player pause];
         self.videoNode.paused = YES;
     }
-    
+}
+
+- (void)pauseRefreshVideo {
+    self.videoPlaybackIsPaused = NO;
+    self.videoNode.paused = NO;
+
+    [self.player pause];
 }
 
 - (void)addNode:(NSString*)urlString degree:(int)degree {

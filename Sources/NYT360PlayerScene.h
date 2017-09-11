@@ -20,8 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)initWithAVPlayer:(AVPlayer *)player boundToView:(SCNView *)view;
 
 - (void)play;
-
 - (void)pause;
+- (void)pauseRefreshVideo;
 
 - (void)addNode:(NSString*)urlString degree:(int)degree;
 - (void)replaceVideo:(NSString*)videoUrl degree:(int)degree;
